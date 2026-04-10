@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AniList Bio — Change Log | Muaz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue: #42BCFE;
+      --blue-dim: #42bcfe33;
+      --blue-mid: #42bcfe88;
+      --bg: #06080f;
+      --surface: #0c101a;
+      --surface2: #111827;
+      --border: #1e2d42;
+      --text: #c9d8e8;
+      --muted: #4a6076;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 500px; height: 500px; background: #42bcfe18; top: -100px; left: -100px; }
+    .blob-2 { width: 400px; height: 400px; background: #0f4a7218; bottom: -100px; right: -100px; }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      margin-bottom: 72px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .header-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--blue);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-tag::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--blue);
+    }
+
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    h1 span {
+      color: var(--blue);
+      text-shadow: 0 0 40px #42bcfe66;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 22px;
+    }
+
+    .meta-pill {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .meta-pill.active {
+      border-color: var(--blue-mid);
+      color: var(--blue);
+      background: var(--blue-dim);
+    }
+
+    /* ── SEARCH ── */
+    .search-bar {
+      position: relative;
+      margin-bottom: 48px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 14px 18px 14px 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-bar input:focus {
+      border-color: var(--blue-mid);
+      box-shadow: 0 0 0 3px var(--blue-dim);
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 90px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+    }
+
+    /* ── ENTRY ── */
+    .entry {
+      display: flex;
+      gap: 0;
+      margin-bottom: 10px;
+      animation: fadeUp 0.5s ease both;
+      opacity: 0;
+    }
+    .entry.visible { opacity: 1; }
+
+    .entry-version {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 80px;
+      padding-top: 13px;
+      text-align: right;
+      padding-right: 20px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .entry-dot {
+      position: relative;
+      flex-shrink: 0;
+      width: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 17px;
+    }
+    .entry-dot::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 1px solid var(--muted);
+      flex-shrink: 0;
+      transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .entry-body {
+      flex: 1;
+      padding: 10px 14px 10px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+      margin-left: 10px;
+    }
+
+    .entry:hover .entry-version { color: var(--blue); }
+    .entry:hover .entry-dot::before {
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 10px var(--blue);
+    }
+    .entry:hover .entry-body {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .entry-text {
+      font-size: 13.5px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* Major version entries */
+    .entry.major .entry-version { color: var(--blue); }
+    .entry.major .entry-dot::before {
+      width: 9px;
+      height: 9px;
+      background: var(--blue-dim);
+      border-color: var(--blue);
+      box-shadow: 0 0 8px var(--blue-mid);
+    }
+    .entry.major .entry-body {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+    .entry.major .entry-text { color: #fff; font-weight: 600; }
+
+    /* ── HIGHLIGHT ── */
+    mark {
+      background: #42bcfe33;
+      color: var(--blue);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      display: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .footer-brand span { color: var(--blue); }
+    .footer-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .footer-link:hover { color: var(--blue); border-color: var(--blue-mid); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-mid); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .timeline::before { left: 70px; }
+      .entry-version { min-width: 60px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="wrapper">
+    <header>
+      <p class="header-tag">AniList Bio · Update History</p>
+      <h1>Change<span>Log</span></h1>
+      <div class="header-meta">
+        <span class="meta-pill active">Current: v3.8.6</span>
+        <span class="meta-pill">User: Muaz</span>
+        <span class="meta-pill">Site: AniList</span>
+        <span class="meta-pill" id="entry-count">— entries</span>
+      </div>
+    </header>
+
+    <div class="search-bar">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search" placeholder="Search versions or changes..." autocomplete="off" spellcheck="false"/>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+    <p class="no-results" id="no-results">No matching entries found.</p>
+
+    <footer>
+      <p class="footer-brand">MUAZ · <span>ANILIST BIO</span> · CHANGELOG</p>
+      <a class="footer-link" href="https://anilist.co/user/ahsanhabibmuaz" target="_blank">↗ AniList Profile</a>
+    </footer>
+  </div>
+
+  <script>
+    const entries = [
+      { v: "1.0",   text: "Initial release" },
+      { v: "1.2",   text: "Profile picture and cover added" },
+      { v: "1.5",   text: "Simple text added" },
+      { v: "1.6",   text: "Grammar fixed" },
+      { v: "1.9",   text: "Songs added" },
+      { v: "2.0.0", text: "Added purple line GIFs, 4 music tracks, ending video (Zani)" },
+      { v: "2.0.1", text: "Fixed image alignments" },
+      { v: "2.2.0", text: "Favorite characters section added" },
+      { v: "2.3.0", text: "Rating system text added" },
+      { v: "2.4.0", text: "Ending video replaced with Nelliel-Honey bye image" },
+      { v: "2.5.0", text: "All images are now clickable and linked with video" },
+      { v: "2.5.5", text: "Some videos optimized" },
+      { v: "2.6.0", text: "Most favorite characters section added" },
+      { v: "2.6.2", text: "Some character names changed" },
+      { v: "2.7.0", text: "AniList special edit section (video) added" },
+      { v: "2.7.1", text: "Video alignment fixed" },
+      { v: "2.7.2", text: "Alignment changed to center" },
+      { v: "2.7.3", text: "Profile picture changed" },
+      { v: "2.8.0", text: "Verified GIF added with linked website" },
+      { v: "2.8.1", text: "Welcome jinwoo-chibi-muaz.png added" },
+      { v: "2.8.2", text: "Colors fixed and size ratio changed for jinwoo-chibi-muaz.png" },
+      { v: "2.8.3", text: "PNG changed to GIF for better aesthetics" },
+      { v: "2.8.5", text: "Name, country, and age added" },
+      { v: "2.8.6", text: "Emojis added before name, country, and age" },
+      { v: "2.9.0", text: "All line dividers changed to blue color" },
+      { v: "2.9.1", text: "About me section added; kiss emoji added" },
+      { v: "3.0.0", text: "Top rated anime, favorite genre, and favorite anime speech added" },
+      { v: "3.0.1", text: "Goodbye condolences text added" },
+      { v: "3.1.0", text: "Favorite character segment rearranged" },
+      { v: "3.1.1", text: "More character names added" },
+      { v: "3.1.2", text: "Jinwoo intro added; yt ahsanhabibmuaz video added" },
+      { v: "3.1.3", text: "AniList Exclusive section added" },
+      { v: "3.1.4", text: "App Modder, Web Dev, GFX Designer, Video Editor tags added" },
+      { v: "3.1.5", text: "Fern and CC images added beside text" },
+      { v: "3.1.6", text: "Itachi and Makima images added" },
+      { v: "3.1.7", text: "Symbol text changed" },
+      { v: "3.1.8", text: "Bio video replaced with transparent GIF images" },
+      { v: "3.1.9", text: "Rating system and top rated anime sections moved to top" },
+      { v: "3.2.0", text: "Badass Abilities section added" },
+      { v: "3.2.1", text: "Cartethyia replaced with Fleurdelys" },
+      { v: "3.3.0", text: "Changli, Jinwoo, manga panel, and Madara images added" },
+      { v: "3.3.1", text: "Rating system text alignment rearranged" },
+      { v: "3.3.2", text: "Outro line GIF changed" },
+      { v: "3.3.3", text: "Images and videos optimized and file size reduced" },
+      { v: "3.3.4", text: "Slogan name changed" },
+      { v: "3.3.5", text: "Hits.sh visitor API added" },
+      { v: "3.3.6", text: "Extra count added to hits.sh" },
+      { v: "3.3.7", text: "All header colors changed to blue" },
+      { v: "3.3.8", text: "Shields.io image badge added" },
+      { v: "3.3.9", text: "Olivia, Marin, and Lucy images added" },
+      { v: "3.4.0", text: "About me image added; about me text changed" },
+      { v: "3.4.1", text: "Music number changed to shields.io API badge" },
+      { v: "3.4.2", text: "Quote author text alignment changed" },
+      { v: "3.4.3", text: "Farewell Honey decoration changed" },
+      { v: "3.4.4", text: "\"Let's Connect\" button with link added" },
+      { v: "3.4.5", text: "GIF profile picture added" },
+      { v: "3.4.7", text: "Verified GIF redirect website UI changed" },
+      { v: "3.4.9", text: "Light-mode and dark-mode images added" },
+      { v: "3.5.0", text: "Link-click song added; Bleach song trimmed; About me updated" },
+      { v: "3.5.1", text: "Maki image added" },
+      { v: "3.5.2", text: "One extra song added" },
+      { v: "3.5.3", text: "AniList Exclusive section linked with coming soon text" },
+      { v: "3.5.4", text: "Official version code, kiss image, Discord, Twitter links added" },
+      { v: "3.5.6", text: "Emojis added to top-rated anime section" },
+      { v: "3.5.7", text: "Heart symbol bolded; AniList theme color updated" },
+      { v: "3.5.8", text: "Favorite anime section divided with different symbols" },
+      { v: "3.5.9", text: "Transparent image alignments and sizes changed" },
+      { v: "3.6.0", text: "All anime exclusive videos linked" },
+      { v: "3.6.1", text: "Character section name changed" },
+      { v: "3.7.0", text: "All music video sizes compressed for faster load" },
+      { v: "3.7.1", text: "Cyberpunk Edgerunners bumped to top" },
+      { v: "3.7.2", text: "Badass Abilities symbol color changed" },
+      { v: "3.7.3", text: "YT intro video moved to Exclusive section" },
+      { v: "3.7.5", text: "Favorite game character emojis added" },
+      { v: "3.8.0", text: "Intro GIF changed; AniList Exclusive section alignment updated" },
+      { v: "3.8.1", text: "Spoiler text removed" },
+      { v: "3.8.3", text: "About me image optimized" },
+      { v: "3.8.5", text: "Music section number text changed" },
+      { v: "3.8.6", text: "Some image links changed" },
+    ];
+
+    const isMajor = v => /^\d+\.\d+\.0$/.test(v) || /^\d+\.0$/.test(v);
+
+    const timeline = document.getElementById('timeline');
+    const searchInput = document.getElementById('search');
+    const noResults = document.getElementById('no-results');
+    const entryCount = document.getElementById('entry-count');
+
+    entryCount.textContent = `${entries.length} entries`;
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function highlight(text, query) {
+      if (!query) return escapeHTML(text);
+      const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return escapeHTML(text).replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+    }
+
+    function render(query = '') {
+      const q = query.trim().toLowerCase();
+      const filtered = entries.filter(e =>
+        !q || e.v.includes(q) || e.text.toLowerCase().includes(q)
+      );
+
+      timeline.innerHTML = '';
+      noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+
+      filtered.forEach((e, i) => {
+        const major = isMajor(e.v);
+        const div = document.createElement('div');
+        div.className = `entry${major ? ' major' : ''}`;
+        div.style.animationDelay = `${Math.min(i * 30, 600)}ms`;
+        div.innerHTML = `
+          <div class="entry-version">${highlight(e.v, q)}</div>
+          <div class="entry-dot"></div>
+          <div class="entry-body">
+            <span class="entry-text">${highlight(e.text, q)}</span>
+          </div>
+        `;
+        timeline.appendChild(div);
+        // Trigger animation
+        requestAnimationFrame(() => div.classList.add('visible'));
+      });
+    }
+
+    searchInput.addEventListener('input', () => render(searchInput.value));
+    render();
+  </script>
+</body>
+</html>
