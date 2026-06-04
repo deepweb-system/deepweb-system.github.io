@@ -33,7 +33,6 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE TEXTURE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
@@ -44,7 +43,6 @@
       opacity: 0.4;
     }
 
-    /* ── GRID BACKGROUND ── */
     body::after {
       content: '';
       position: fixed;
@@ -58,7 +56,6 @@
       z-index: 0;
     }
 
-    /* ── GLOW BLOBS ── */
     .blob {
       position: fixed;
       border-radius: 50%;
@@ -69,7 +66,6 @@
     .blob-1 { width: 500px; height: 500px; background: #42bcfe18; top: -100px; left: -100px; }
     .blob-2 { width: 400px; height: 400px; background: #0f4a7218; bottom: -100px; right: -100px; }
 
-    /* ── WRAPPER ── */
     .wrapper {
       position: relative;
       z-index: 1;
@@ -78,7 +74,6 @@
       padding: 80px 24px 120px;
     }
 
-    /* ── HEADER ── */
     header {
       margin-bottom: 72px;
       animation: fadeUp 0.7s ease both;
@@ -140,7 +135,6 @@
       background: var(--blue-dim);
     }
 
-    /* ── SEARCH ── */
     .search-bar {
       position: relative;
       margin-bottom: 48px;
@@ -172,7 +166,6 @@
       font-size: 14px;
     }
 
-    /* ── TIMELINE ── */
     .timeline {
       position: relative;
     }
@@ -186,7 +179,6 @@
       background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
     }
 
-    /* ── ENTRY ── */
     .entry {
       display: flex;
       gap: 0;
@@ -257,7 +249,6 @@
       line-height: 1.5;
     }
 
-    /* Major version entries */
     .entry.major .entry-version { color: var(--blue); }
     .entry.major .entry-dot::before {
       width: 9px;
@@ -272,7 +263,27 @@
     }
     .entry.major .entry-text { color: #fff; font-weight: 600; }
 
-    /* ── HIGHLIGHT ── */
+    /* Latest entry highlight */
+    .entry.latest .entry-dot::before {
+      width: 9px;
+      height: 9px;
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 14px var(--blue), 0 0 28px var(--blue-mid);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .entry.latest .entry-version { color: var(--blue); }
+    .entry.latest .entry-body {
+      background: var(--blue-dim);
+      border-color: var(--blue-mid);
+    }
+    .entry.latest .entry-text { color: #fff; font-weight: 600; }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 14px var(--blue), 0 0 28px var(--blue-mid); }
+      50% { box-shadow: 0 0 20px var(--blue), 0 0 40px var(--blue-mid); }
+    }
+
     mark {
       background: #42bcfe33;
       color: var(--blue);
@@ -280,7 +291,6 @@
       padding: 0 2px;
     }
 
-    /* ── NO RESULTS ── */
     .no-results {
       text-align: center;
       padding: 60px 0;
@@ -290,7 +300,6 @@
       display: none;
     }
 
-    /* ── FOOTER ── */
     footer {
       margin-top: 80px;
       padding-top: 32px;
@@ -321,19 +330,16 @@
     }
     .footer-link:hover { color: var(--blue); border-color: var(--blue-mid); }
 
-    /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--blue-mid); }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 520px) {
       .timeline::before { left: 70px; }
       .entry-version { min-width: 60px; font-size: 10px; }
@@ -349,7 +355,7 @@
       <p class="header-tag">AniList Bio · Update History</p>
       <h1>Change<span>Log</span></h1>
       <div class="header-meta">
-        <span class="meta-pill active">Current: v3.9.2</span>
+        <span class="meta-pill active" id="current-version">Current: —</span>
         <span class="meta-pill">User: Muaz</span>
         <span class="meta-pill">Site: AniList</span>
         <span class="meta-pill" id="entry-count">— entries</span>
@@ -453,8 +459,8 @@
       { v: "3.8.6", text: "Some image links changed" },
       { v: "3.9.0", text: "New music added" },
       { v: "3.9.1", text: "About Me section updated" },
-      { v: "3.9.2", text: "intro gif, outro image size changed from percentages to pixel" },
-      { v: "3.9.3", text: "Spotify, Last.fm added" },
+      { v: "3.9.2", text: "Intro gif, outro image size changed from percentages to pixel" },
+      { v: "3.9.3", text: "Spotify, Last.fm added to Socials" },
     ];
 
     const isMajor = v => /^\d+\.\d+\.0$/.test(v) || /^\d+\.0$/.test(v);
@@ -463,7 +469,11 @@
     const searchInput = document.getElementById('search');
     const noResults = document.getElementById('no-results');
     const entryCount = document.getElementById('entry-count');
+    const currentVersionPill = document.getElementById('current-version');
 
+    // Dynamically set current version from last entry
+    const latestVersion = entries[entries.length - 1].v;
+    currentVersionPill.textContent = `Current: v${latestVersion}`;
     entryCount.textContent = `${entries.length} entries`;
 
     function escapeHTML(str) {
@@ -487,8 +497,9 @@
 
       filtered.forEach((e, i) => {
         const major = isMajor(e.v);
+        const isLatest = !q && e.v === latestVersion;
         const div = document.createElement('div');
-        div.className = `entry${major ? ' major' : ''}`;
+        div.className = `entry${major ? ' major' : ''}${isLatest ? ' latest' : ''}`;
         div.style.animationDelay = `${Math.min(i * 30, 600)}ms`;
         div.innerHTML = `
           <div class="entry-version">${highlight(e.v, q)}</div>
@@ -498,7 +509,6 @@
           </div>
         `;
         timeline.appendChild(div);
-        // Trigger animation
         requestAnimationFrame(() => div.classList.add('visible'));
       });
     }
