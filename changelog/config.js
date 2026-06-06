@@ -15,11 +15,7 @@
 // define which creatures spawn on the page. remove any unwanted ones.
 // each id must be unique
 // if two of them overlap and pet and dragging interactions happen, only the one stated here last will get interacted with
-window.SPAWNING = [
-  { id: 'webmeji-0', config: 'SHIMEJI_CONFIG' },
-  { id: 'webmeji-1', config: 'MIKU_CONFIG' },
-  { id: 'webmeji-2', config: 'MIKU_CONFIG' }
-];
+window.SPAWNING = [{id:'webmeji-0', config:'SHIMEJI_CONFIG'}];
 
 // base shimeji config ----------------------------------------------
 // all configs should have same actions, but allowances can differ
