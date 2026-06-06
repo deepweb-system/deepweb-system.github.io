@@ -7,10 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   
-<link rel="stylesheet" href="webmeji.css">
-<script src="config.js"></script>
-<script src="webmeji.js"></script>
-  
   <style>
     :root {
       --blue: #42BCFE;
@@ -468,6 +464,7 @@
       { v: "3.9.2", text: "Intro gif, outro image size changed from percentages to pixel" },
       { v: "3.9.3", text: "Spotify, Last.fm added to Socials" },
       { v: "3.9.4", text: "Socials color changed to blue" },
+      { v: "3.9.5", text: "website url changed to /changelog" },
     ];
 
     const isMajor = v => /^\d+\.\d+\.0$/.test(v) || /^\d+\.0$/.test(v);
@@ -523,7 +520,6 @@
     searchInput.addEventListener('input', () => render(searchInput.value));
     render();
   </script>
-
 
 </body>
 </html>
