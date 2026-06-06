@@ -5,9 +5,6 @@
 // last updated: 27 january 2026
 // homepage: webmeji.neocities.org
 
-// this is likely very unoptimized and quite messy code, i apologize for that. plain info on each function is at the bottom of the readme
-// this project was made with the intention that changing anything in the config.js would be easy. this is not that. modifying this comes at your own risk.
-
 window.addEventListener('DOMContentLoaded', () => {
   // collect unique config names from SPAWNING
   const configNames = [...new Set(
@@ -333,41 +330,6 @@ class Creature {
     if (!this.spriteConfig.ALLOWANCES?.includes('drag')) return;
     if (!this.spriteConfig.ALLOWANCES?.includes('bottom')) return;
 
-    let offsetX = 0;
-    let offsetY = 0;
-
-    const onPointerMove = (e) => {
-        e.preventDefault();
-        
-        let clientX = e.clientX ?? e.touches?.[0].clientX;
-        let clientY = e.clientY ?? e.touches?.[0].clientY;
-
-        this.positionX = clientX - offsetX;
-        this.positionY = clientY - offsetY;
-
-        // clamp position to window
-        this.positionX = Math.max(0, Math.min(this.positionX, window.innerWidth - this.containerWidth));
-        this.positionY = Math.max(0, Math.min(this.positionY, window.innerHeight - this.containerHeight));
-
-        this.container.style.left = this.positionX + 'px';
-        this.container.style.top  = this.positionY + 'px';
-    };
-
-    const onPointerUp = () => {
-        window.removeEventListener('mousemove', onPointerMove);
-        window.removeEventListener('touchmove', onPointerMove);
-        window.removeEventListener('mouseup', onPointerUp);
-        window.removeEventListener('touchend', onPointerUp);
-
-        this.isDragging = false;
-        this.isFalling = false;
-
-        this.resetAnimation();
-        this.fallToBottom();
-
-        this.animationFrameId = requestAnimationFrame(this.animate);
-    };
-
     // listen to pointer down to start drag
     this.container.addEventListener('mousedown', (e) => {
         e.preventDefault();
@@ -382,82 +344,82 @@ class Creature {
 
     // actual drag logic
     this.startDrag = (clientX, clientY) => {
-    this.resetAnimation();
+      this.resetAnimation();
 
-    if (this.animationFrameId) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
-    }
+      if (this.animationFrameId) {
+          cancelAnimationFrame(this.animationFrameId);
+          this.animationFrameId = null;
+      }
 
-    this.isDragging = true;
-    this.tripAfterFallActive = false;
-    this.isJumping = false;
-    this.isFalling = false;
-    this.isPetting = false;
+      this.isDragging = true;
+      this.tripAfterFallActive = false;
+      this.isJumping = false;
+      this.isFalling = false;
+      this.isPetting = false;
 
-    this.currentAction = 'drag';
-    this.img.style.transform = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
+      this.currentAction = 'drag';
+      this.img.style.transform = this.facing === 'left' ? 'scaleX(1)' : 'scaleX(-1)';
 
-    if (this.dragFrameTimer) clearInterval(this.dragFrameTimer);
+      if (this.dragFrameTimer) clearInterval(this.dragFrameTimer);
 
-    const dragConfig = this.spriteConfig.drag;
-    if (dragConfig?.frames?.length) {
-        let frame = 0;
-        this.img.src = dragConfig.frames[0];
+      const dragConfig = this.spriteConfig.drag;
+      if (dragConfig?.frames?.length) {
+          let frame = 0;
+          this.img.src = dragConfig.frames[0];
 
-        this.dragFrameTimer = setInterval(() => {
-            frame = (frame + 1) % dragConfig.frames.length;
-            this.img.src = dragConfig.frames[frame];
-        }, dragConfig.interval);
-    }
+          this.dragFrameTimer = setInterval(() => {
+              frame = (frame + 1) % dragConfig.frames.length;
+              this.img.src = dragConfig.frames[frame];
+          }, dragConfig.interval);
+      }
 
-    const rect = this.container.getBoundingClientRect();
-    let offsetX = clientX - rect.left;  // remember grab offset
-    let offsetY = clientY - rect.top;
+      const rect = this.container.getBoundingClientRect();
+      let offsetX = clientX - rect.left;  // remember grab offset
+      let offsetY = clientY - rect.top;
 
-    const onPointerMove = (e) => {
-        e.preventDefault();
-        
-        let clientX = e.clientX ?? e.touches?.[0].clientX;
-        let clientY = e.clientY ?? e.touches?.[0].clientY;
+      const onPointerMove = (e) => {
+          e.preventDefault();
+          
+          let clientX = e.clientX ?? e.touches?.[0].clientX;
+          let clientY = e.clientY ?? e.touches?.[0].clientY;
 
-        this.positionX = clientX - offsetX;
-        this.positionY = clientY - offsetY;
+          this.positionX = clientX - offsetX;
+          this.positionY = clientY - offsetY;
 
-        // clamp to window
-        this.positionX = Math.max(0, Math.min(this.positionX, window.innerWidth - this.containerWidth));
-        this.positionY = Math.max(0, Math.min(this.positionY, window.innerHeight - this.containerHeight));
+          // clamp to window
+          this.positionX = Math.max(0, Math.min(this.positionX, window.innerWidth - this.containerWidth));
+          this.positionY = Math.max(0, Math.min(this.positionY, window.innerHeight - this.containerHeight));
 
-        this.container.style.left = this.positionX + 'px';
-        this.container.style.top  = this.positionY + 'px';
+          this.container.style.left = this.positionX + 'px';
+          this.container.style.top  = this.positionY + 'px';
+      };
+
+      const onPointerUp = () => {
+          window.removeEventListener('mousemove', onPointerMove);
+          window.removeEventListener('touchmove', onPointerMove);
+          window.removeEventListener('mouseup', onPointerUp);
+          window.removeEventListener('touchend', onPointerUp);
+
+          this.isDragging = false;
+          this.isFalling = false;
+
+          // stop drag animation
+          if (this.dragFrameTimer) {
+              clearInterval(this.dragFrameTimer);
+              this.dragFrameTimer = null;
+          }
+
+          this.resetAnimation();
+          this.fallToBottom(); // return to bottom after drag
+
+          this.animationFrameId = requestAnimationFrame(this.animate);
+      };
+
+      window.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('touchmove', onPointerMove, { passive: false });
+      window.addEventListener('mouseup', onPointerUp);
+      window.addEventListener('touchend', onPointerUp);
     };
-
-    const onPointerUp = () => {
-        window.removeEventListener('mousemove', onPointerMove);
-        window.removeEventListener('touchmove', onPointerMove);
-        window.removeEventListener('mouseup', onPointerUp);
-        window.removeEventListener('touchend', onPointerUp);
-
-        this.isDragging = false;
-        this.isFalling = false;
-
-        // stop drag animation
-        if (this.dragFrameTimer) {
-            clearInterval(this.dragFrameTimer);
-            this.dragFrameTimer = null;
-        }
-
-        this.resetAnimation();
-        this.fallToBottom(); // return to bottom after drag
-
-        this.animationFrameId = requestAnimationFrame(this.animate);
-    };
-
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('touchmove', onPointerMove, { passive: false });
-    window.addEventListener('mouseup', onPointerUp);
-    window.addEventListener('touchend', onPointerUp);
-  };
   }
 
   // falling and recovery -------------------------------------------------
@@ -555,7 +517,6 @@ class Creature {
 
   // action selection and animation --------------------------------------------------
   // pick next action based on edge, jump chance, or forced actions
-  // If on an edge choose edge behavior -> Random chance to jump -> Forced walk / forced think -> Pick next action from shuffled list
   setNextAction() {
     if (this.isDragging || this.isFalling ) return;
 
@@ -567,7 +528,7 @@ class Creature {
     }
 
     if (!this.isJumping && this.positionY >= window.innerHeight - this.containerHeight) {
-      if (Math.random() < this.spriteConfig.JUMP_CHANCE) { // decicion on wether to jump or not
+      if (Math.random() < this.spriteConfig.JUMP_CHANCE) { // decision on whether to jump or not
         const edges = ['top', 'left', 'right']
           .filter(e => this.spriteConfig.ALLOWANCES.includes(e));
 
@@ -604,9 +565,9 @@ class Creature {
   // force walk for a number of cycles
   startForcedWalk() {
     const { frames, interval } = this.spriteConfig.walk;
-    const walkCycles = this.spriteConfig.forcewalk;
+    const { loops } = this.spriteConfig.forcewalk; // Successfully handles the configuration object property
     this.currentAction = 'forced-walk';
-    this.playAnimation(frames, interval, walkCycles, () => this.setNextAction());
+    this.playAnimation(frames, interval, loops, () => this.setNextAction());
   }
 
   // force think for a number of cycles
