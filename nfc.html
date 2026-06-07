@@ -273,7 +273,7 @@ body::after {
 ═══════════════════════════════════════════ */
 .card-header {
   padding: var(--card-pad-y) var(--card-pad-x) clamp(18px,3.5vh,26px);
-  padding-right: calc(var(--card-pad-x) + 36px); /* clear toolbar */
+  /* no extra right padding — toolbar is absolute, doesn't affect flow */
   background: var(--header-bg);
   border-bottom: 1px solid var(--div-col);
   text-align:center; position:relative; z-index:1;
@@ -341,44 +341,64 @@ a.ci .ci-val { color:var(--blue); font-weight:500; }
 .ci-arr svg { width:13px; height:13px; fill:var(--ink); }
 
 /* ═══════════════════════════════════════════
-   ID NOTE — marquee with edge fades + pause
+   ID NOTE — marquee with solid-color edge fades
 ═══════════════════════════════════════════ */
 .id-note {
-  display:flex; align-items:center; gap:0;
+  display:flex; align-items:center;
   margin: 0 clamp(10px,2.5vw,16px) clamp(10px,2vh,14px);
   border-radius:var(--r-sm);
   background:var(--note-bg); border:1px solid var(--note-bdr);
   position:relative; z-index:1; overflow:hidden;
   animation:rowIn 0.48s 0.38s both;
-  height:36px;
+  height:34px;
   transition:background var(--tr),border-color var(--tr);
 }
-/* icon pinned left */
+
+/* icon block — sits left, no gap, solid bg matches note */
 .note-icon {
-  flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  width:36px; height:36px; position:relative; z-index:3;
-  background:var(--note-bg); /* matches note bg to "cover" text passing under */
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  width:32px; height:34px;
+  position:relative; z-index:4;
+  /* solid color so scrolling text is fully hidden underneath */
+  background:var(--note-bg);
+  transition:background var(--tr);
 }
 .note-icon svg { width:13px; height:13px; fill:var(--ink-4); transition:fill var(--tr); }
-/* fade overlays */
-.note-fade-l, .note-fade-r {
-  position:absolute; top:0; bottom:0; width:32px; z-index:2; pointer-events:none;
+
+/* scrolling area */
+.note-track-wrap {
+  flex:1; overflow:hidden; position:relative;
+  /* no mask — we use pseudo overlay instead */
 }
-.note-fade-l { left:36px; background:linear-gradient(90deg, var(--note-bg) 0%, transparent 100%); }
-.note-fade-r { right:0;   background:linear-gradient(270deg, var(--bg) 0%, transparent 100%); transition:background var(--tr); }
-/* scrolling track */
-.note-track-wrap { flex:1; overflow:hidden; position:relative; }
+
 .note-track {
   display:inline-flex; white-space:nowrap;
-  /* JS drives this via animation-play-state + animation-name reset trick */
+  will-change:transform;
 }
 .note-track span {
   font-size:clamp(10.5px,2.2vw,12px);
   color:var(--ink-3); font-style:italic; font-weight:300;
-  padding-right:80px; white-space:nowrap;
+  padding-right:72px; white-space:nowrap;
   transition:color var(--tr);
 }
 @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── Fade overlays — solid bg color gradients, sit on top of text ── */
+/* Left fade: 18px wide, right after icon */
+.note-fade-l {
+  position:absolute; top:0; bottom:0; left:32px; width:18px;
+  background: linear-gradient(to right, var(--note-bg) 0%, transparent 100%);
+  z-index:3; pointer-events:none;
+  transition:background var(--tr);
+}
+/* Right fade: 24px wide */
+.note-fade-r {
+  position:absolute; top:0; bottom:0; right:0; width:24px;
+  background: linear-gradient(to left, var(--note-bg) 0%, transparent 100%);
+  z-index:3; pointer-events:none;
+  transition:background var(--tr);
+}
 
 /* ═══════════════════════════════════════════
    DIVIDER & FOOTER
@@ -397,142 +417,10 @@ a.ci .ci-val { color:var(--blue); font-weight:500; }
 #cel-canvas {
   position:fixed; top:0; left:0; width:100%; height:100%;
   z-index:9998;
-  cursor:crosshair;
-  pointer-events:none; /* only active during show */
-}
-#cel-canvas.active { pointer-events:all; }
-
-/* ═══════════════════════════════════════════
-   CHIBI CHARACTER — pure CSS animated sprite
-═══════════════════════════════════════════ */
-.chibi {
-  position:fixed; bottom:0; z-index:9990;
-  width:52px; height:52px;
   pointer-events:none;
-  animation: chibiWalk 18s linear infinite;
 }
-/* The character is drawn entirely with CSS */
-.chibi-body {
-  position:relative; width:52px; height:52px;
-}
-/* Face */
-.chibi-head {
-  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
-  width:26px; height:26px; border-radius:50%;
-  background:#f8d5b5;
-  border:2px solid #d4956a;
-  box-shadow: inset -3px -3px 6px rgba(0,0,0,0.08);
-  overflow:hidden;
-}
-/* Hair */
-.chibi-hair {
-  position:absolute; top:-4px; left:-4px; right:-4px;
-  height:16px; border-radius:50% 50% 0 0;
-  background:#1a1018;
-}
-/* Ears */
-.chibi-ear-l, .chibi-ear-r {
-  position:absolute; bottom:5px;
-  width:8px; height:8px; border-radius:50%;
-  background:#f8d5b5; border:2px solid #d4956a;
-}
-.chibi-ear-l { left:-5px; }
-.chibi-ear-r { right:-5px; }
-/* Eyes */
-.chibi-eyes {
-  position:absolute; bottom:9px; left:0; right:0;
-  display:flex; justify-content:center; gap:6px;
-}
-.chibi-eye {
-  width:4px; height:5px; border-radius:50%;
-  background:#2a1a1a;
-  animation: eyeBlink 3.5s ease-in-out infinite;
-}
-@keyframes eyeBlink {
-  0%,90%,100%{transform:scaleY(1)} 94%{transform:scaleY(0.1)}
-}
-/* Blush */
-.chibi-blush-l, .chibi-blush-r {
-  position:absolute; bottom:6px;
-  width:6px; height:4px; border-radius:50%;
-  background:rgba(255,150,140,0.45);
-}
-.chibi-blush-l { left:2px; } .chibi-blush-r { right:2px; }
-/* Mouth */
-.chibi-mouth {
-  position:absolute; bottom:5px; left:50%; transform:translateX(-50%);
-  width:6px; height:3px;
-  border-bottom:2px solid #c47a5a; border-radius:0 0 4px 4px;
-}
-/* Body */
-.chibi-torso {
-  position:absolute; bottom:4px; left:50%; transform:translateX(-50%);
-  width:20px; height:18px; border-radius:6px 6px 4px 4px;
-  background:linear-gradient(180deg,#c0392b 0%,#e74c3c 100%);
-  border:2px solid #922b21;
-}
-/* Collar */
-.chibi-collar {
-  position:absolute; bottom:19px; left:50%; transform:translateX(-50%);
-  width:16px; height:5px; border-radius:3px;
-  background:#fff; border:1px solid #d0d0d0;
-}
-/* Legs — animated walk */
-.chibi-leg-l, .chibi-leg-r {
-  position:absolute; bottom:0; width:8px; height:10px;
-  border-radius:3px 3px 5px 5px;
-  background:#2c3e50; border:1px solid #1a252f;
-}
-.chibi-leg-l { left:11px; transform-origin:top center; animation:walkL 0.5s ease-in-out infinite alternate; }
-.chibi-leg-r { right:11px; transform-origin:top center; animation:walkR 0.5s ease-in-out infinite alternate; }
-@keyframes walkL { from{transform:rotate(-14deg)} to{transform:rotate(14deg)} }
-@keyframes walkR { from{transform:rotate(14deg)} to{transform:rotate(-14deg)} }
-/* Arms */
-.chibi-arm-l, .chibi-arm-r {
-  position:absolute; bottom:12px; width:6px; height:14px;
-  border-radius:3px; background:#c0392b; border:1px solid #922b21;
-}
-.chibi-arm-l { left:7px; transform-origin:top center; animation:armL 0.5s ease-in-out infinite alternate; }
-.chibi-arm-r { right:7px; transform-origin:top center; animation:armR 0.5s ease-in-out infinite alternate; }
-@keyframes armL { from{transform:rotate(18deg)} to{transform:rotate(-18deg)} }
-@keyframes armR { from{transform:rotate(-18deg)} to{transform:rotate(18deg)} }
-/* Tail (Makima reference) */
-.chibi-tail {
-  position:absolute; bottom:6px; right:2px;
-  width:5px; height:18px; border-radius:3px;
-  background:#1a1018;
-  transform-origin:bottom center;
-  animation:tailWag 1.2s ease-in-out infinite alternate;
-}
-@keyframes tailWag { from{transform:rotate(-20deg)} to{transform:rotate(20deg)} }
 
-/* Walk across screen */
-@keyframes chibiWalk {
-  0%   { left:-60px;  transform:scaleX(1);  }
-  48%  { left:calc(100% + 10px); transform:scaleX(1); }
-  49%  { left:calc(100% + 10px); transform:scaleX(-1); }
-  50%  { left:calc(100% + 10px); transform:scaleX(-1); }
-  98%  { left:-60px;  transform:scaleX(-1); }
-  99%  { left:-60px;  transform:scaleX(1);  }
-  100% { left:-60px;  transform:scaleX(1);  }
-}
-/* bounce bob */
-.chibi-body { animation: chibiSway 0.5s ease-in-out infinite alternate; }
-@keyframes chibiSway { from{transform:translateY(0)} to{transform:translateY(-3px)} }
-
-/* name tag above chibi */
-.chibi-tag {
-  position:absolute; bottom:54px; left:50%; transform:translateX(-50%);
-  background:rgba(255,255,255,0.90); border:1px solid rgba(0,0,0,0.12);
-  border-radius:6px; padding:2px 6px;
-  font-family:'Syne',sans-serif; font-size:8px; font-weight:700;
-  color:#c0392b; white-space:nowrap;
-  box-shadow:0 2px 6px rgba(0,0,0,0.10);
-}
-.chibi-tag::after {
-  content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
-  border:4px solid transparent; border-top-color:rgba(255,255,255,0.90);
-}
+/* chibi removed */
 
 /* ═══════════════════════════════════════════
    RESPONSIVE
@@ -546,32 +434,6 @@ a.ci .ci-val { color:var(--blue); font-weight:500; }
 <body>
 
 <canvas id="cel-canvas"></canvas>
-
-<!-- Chibi character -->
-<div class="chibi" id="chibi" aria-hidden="true">
-  <div class="chibi-tag">Makima</div>
-  <div class="chibi-body">
-    <div class="chibi-arm-l"></div>
-    <div class="chibi-arm-r"></div>
-    <div class="chibi-torso"></div>
-    <div class="chibi-collar"></div>
-    <div class="chibi-head">
-      <div class="chibi-hair"></div>
-      <div class="chibi-ear-l"></div>
-      <div class="chibi-ear-r"></div>
-      <div class="chibi-eyes">
-        <div class="chibi-eye"></div>
-        <div class="chibi-eye"></div>
-      </div>
-      <div class="chibi-blush-l"></div>
-      <div class="chibi-blush-r"></div>
-      <div class="chibi-mouth"></div>
-    </div>
-    <div class="chibi-leg-l"></div>
-    <div class="chibi-leg-r"></div>
-    <div class="chibi-tail"></div>
-  </div>
-</div>
 
 <main class="card" id="card" role="main">
 
@@ -655,7 +517,6 @@ a.ci .ci-val { color:var(--blue); font-weight:500; }
     </a>
   </ul>
 
-  <!-- ID Note marquee -->
   <div class="id-note" role="note">
     <div class="note-icon">
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -927,11 +788,9 @@ class Balloon{
     this.rad=r(20,44); this.col=BC[ri(0,BC.length)];
     this.alpha=1; this.wob=r(0,Math.PI*2); this.wobSpd=r(0.04,0.09);
     this.str=r(26,42); this.dead=false; this.delay=oy?0:ri(0,50);
-    this.dragging=false; this.dx=0; this.dy=0;
   }
   update(){
     if(this.delay-->0)return;
-    if(this.dragging)return;
     this.wob+=this.wobSpd;
     this.x+=this.vx+Math.sin(this.wob)*0.45;
     this.y+=this.vy; this.vy+=0.015;
@@ -952,7 +811,6 @@ class Balloon{
     CTX.beginPath();CTX.arc(x,y+rad,3.2,0,Math.PI*2);CTX.fillStyle=col;CTX.fill();
     CTX.restore();
   }
-  hitTest(px,py){ return Math.hypot(px-this.x,py-this.y)<this.rad; }
 }
 
 /* Confetti */
@@ -1063,57 +921,18 @@ class Streamer{
 
 function burst(x,y,n){for(let i=0;i<(n||16);i++)things.push(new Star(x,y));}
 
-/* ── DRAG INTERACTION ── */
-let dragging = null, dragOffX=0, dragOffY=0;
-
-function getPos(e){ const t=e.touches?e.touches[0]:e; return{x:t.clientX,y:t.clientY}; }
-
-CV.addEventListener('pointerdown', e => {
-  if(!CV.classList.contains('active'))return;
-  const{x,y}=getPos(e);
-  // find topmost balloon under pointer
-  for(let i=things.length-1;i>=0;i--){
-    const t=things[i];
-    if(t instanceof Balloon && t.hitTest && t.hitTest(x,y)){
-      dragging=t; t.dragging=true; dragOffX=x-t.x; dragOffY=y-t.y;
-      CV.setPointerCapture(e.pointerId);
-      return;
-    }
-  }
-  // click on canvas = spawn burst + confetti at point
-  burst(x,y,12);
-  const eArr=randomEmojis(3);
-  eArr.forEach(em=>things.push(new Doodle(em,x,y,false)));
-  for(let i=0;i<15;i++)things.push(new Confetti(x,y));
-  if(!celRAF)celRAF=requestAnimationFrame(celTick);
-});
-
-CV.addEventListener('pointermove', e => {
-  if(!dragging)return;
-  const{x,y}=getPos(e);
-  dragging.x=x-dragOffX; dragging.y=y-dragOffY;
-});
-
-CV.addEventListener('pointerup', e => {
-  if(dragging){ dragging.dragging=false; dragging.vy=r(-3,-1.5); dragging=null; }
-});
-
 /* ── MAIN LOOP ── */
 function celTick(){
   CTX.clearRect(0,0,CW,CH);
   things.forEach(t=>{t.update();t.draw();});
   things=things.filter(t=>!t.dead);
   if(things.length>0){celRAF=requestAnimationFrame(celTick);}
-  else{
-    celRAF=null;
-    CV.classList.remove('active');
-  }
+  else{ celRAF=null; }
 }
 
 /* ── LAUNCH ── */
 function launch(){
   playCelebSound();
-  CV.classList.add('active');
 
   const emojis=randomEmojis(20);
 
