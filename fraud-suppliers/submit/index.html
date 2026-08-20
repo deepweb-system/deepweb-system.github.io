@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submit a Report - KSA Supplier Watch</title>
+<!-- IMPORTANT: Notice the "../" which tells the browser to look one folder up for the CSS -->
+<link rel="stylesheet" href="../style.css">
+</head>
+<body style="padding-bottom: 28px;">
+
+<div class="container">
+  <header class="header">
+    <div class="brand">
+      <div class="danger-icon">📝</div>
+      <div class="title-area">
+        <h1>Submit a Report</h1>
+        <p>Direct Web3Forms API Submission</p>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span> <span id="themeText">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <a href="../index.html" class="back-link">← Back to Supplier List</a>
+    
+    <div style="margin-bottom: 20px;">
+      <h2 style="font-size: 22px; margin-bottom: 6px;">Report a Supplier</h2>
+      <p style="font-size: 13px; color: var(--muted);">Use this form to directly report a supplier for payment or salary issues. Submissions are sent securely.</p>
+    </div>
+
+    <!-- Web3Forms Integration -->
+    <form action="https://api.web3forms.com/submit" method="POST" class="submit-form">
+      <input type="hidden" name="access_key" value="1005f395-35e8-449a-bfdb-fb4f43a3c2ea">
+
+      <div class="form-group">
+        <label for="name">Supplier Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g., ABC Contracting" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Your Email (For Verification)</label>
+        <input type="email" id="email" name="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Issue Details</label>
+        <textarea id="message" name="message" rows="5" placeholder="Describe the payment or salary issues... (e.g., Unpaid for 3 months)" required></textarea>
+      </div>
+
+      <button type="submit" class="form-submit-btn">Submit Report</button>
+    </form>
+  </main>
+</div>
+
+<script>
+// Theme Switcher Logic (Shared across both pages)
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  
+  document.body.classList.add('theme-animating');
+  setTimeout(() => document.body.classList.remove('theme-animating'), 500);
+
+  html.setAttribute('data-theme', newTheme);
+  document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('themeText').textContent = isDark ? 'Dark' : 'Light';
+  localStorage.setItem('theme', newTheme);
+}
+
+// Initialize Theme from LocalStorage
+(function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeIcon').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeText').textContent = savedTheme === 'dark' ? 'Light' : 'Dark';
+})();
+</script>
+</body>
+</html>
