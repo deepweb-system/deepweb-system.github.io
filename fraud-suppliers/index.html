@@ -43,6 +43,7 @@
   </section>
 
   <main id="list" class="supplier-list"></main>
+  
   <div class="modal" id="reportModal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-backdrop" onclick="closeInfo()"></div>
     <div class="modal-card">
@@ -59,6 +60,14 @@
       <span id="copyrightText"></span>
     </div>
   </footer>
+</div>
+
+<!-- Sticky Downsite Note Bar linking to the new submit folder -->
+<div class="sticky-bar">
+  <span>... want to add more fraud supply?</span>
+  <button class="submit-btn" onclick="window.location.href='submit/index.html'">
+    ℹ️ Submit Here
+  </button>
 </div>
 
 <script>
@@ -180,11 +189,9 @@ const list = document.getElementById('list');
 const search = document.getElementById('search');
 const count = document.getElementById('visibleCount');
 
-// Set Dynamic Copyright Info
 const currentYear = new Date().getFullYear();
 document.getElementById('copyrightText').textContent = `©${currentYear} - All Rights Reserved by Muaz.`;
 
-// Animated Render Function with Staggered Delays
 function render(filter='') {
   const q = filter.trim().toLowerCase();
   const rows = suppliers.filter(s => (s.name + ' ' + s.info).toLowerCase().includes(q));
@@ -197,7 +204,6 @@ function render(filter='') {
 
   list.innerHTML = rows.map((s, idx) => {
     const originalIndex = suppliers.indexOf(s);
-    // Stagger animation up to 15 items max for optimal performance
     const delay = Math.min(idx * 0.02, 0.3);
     
     return `<article class="supplier-card" style="animation-delay: ${delay}s">
@@ -230,13 +236,11 @@ function escapeHtml(str) {
   return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
 
-// Theme Switcher with Triggered JS Body Pulse Animation
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
   const newTheme = isDark ? 'light' : 'dark';
   
-  // Trigger animation pulse
   document.body.classList.add('theme-animating');
   setTimeout(() => document.body.classList.remove('theme-animating'), 500);
 
@@ -246,7 +250,6 @@ function toggleTheme() {
   localStorage.setItem('theme', newTheme);
 }
 
-// Initialize Theme
 (function initTheme() {
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
@@ -256,18 +259,6 @@ function toggleTheme() {
 
 search.addEventListener('input', e => render(e.target.value));
 render();
-  // Pop-up alert for submitting new reports
-function triggerReportPopup() {
-  alert("⚠️ SUBMISSION NOTICE:\n\nPlease ensure you have the supplier name and verifiable evidence of payment/salary issues ready.\n\nClick OK to proceed to WhatsApp.");
-  window.open("https://wa.me/966500896152", "_blank", "noopener");
-}
 </script>
-  <!-- Sticky Downsite Note Bar -->
-<div class="sticky-bar">
-  <span>... want to add more fraud supply?</span>
-  <button class="submit-btn" onclick="triggerReportPopup()">
-    ℹ️ Submit Here
-  </button>
-</div>
 </body>
 </html>
