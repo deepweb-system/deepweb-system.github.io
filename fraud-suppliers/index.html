@@ -14,8 +14,8 @@
     <div class="brand">
       <div class="danger-icon">⚠️</div>
       <div class="title-area">
-        <h1>KSA Supplier Watch</h1>
-        <p>Community reference for payment & salary issues in KSA</p>
+        <h1>⚠️ KSA Supplier Watch</h1>
+        <p>Reported supplier-office payment & salary issues</p>
       </div>
     </div>
     <div class="controls">
@@ -28,7 +28,10 @@
   <div class="notice">
     <span class="notice-icon">⚠️</span>
     <div>
-      <strong>Caution:</strong> These listings represent community-submitted reports regarding unpaid or delayed payments. Verify all information independently.
+      <strong>Community Report:</strong> This list contains supplier offices reported for unpaid or delayed payments.
+      <div class="vote-line">🔥 <b>Over 100+ people voted these suppliers as Fraud</b></div>
+      <p class="report-note">Previous report: “Salary & payment issues reported. Proceed with caution. Some suppliers have a good reputation, but due to company payment issues, their payments are delayed.”</p>
+      <small>This is community-submitted information, not a verified legal finding. Verify the current situation independently.</small>
     </div>
   </div>
 
@@ -40,6 +43,16 @@
   </section>
 
   <main id="list" class="supplier-list"></main>
+  <div class="modal" id="reportModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" onclick="closeInfo()"></div>
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeInfo()" aria-label="Close">×</button>
+      <div class="modal-label">⚠ REPORTED INFORMATION</div>
+      <h2 id="modalTitle"></h2>
+      <div class="modal-report"><strong>Community report</strong><p id="modalInfo"></p></div>
+      <p class="modal-footnote">This information is a community report and should be independently verified.</p>
+    </div>
+  </div>
 
   <footer>
     <div class="footer-contact">
@@ -198,7 +211,7 @@ function render(filter='') {
       <div class="supplier-info">
         <span class="supplier-num">${String(originalIndex + 1).padStart(2, '0')}</span>
         <span class="supplier-name">${escapeHtml(s.name)}</span>
-        ${s.info ? `<span class="flag">REPORTED</span>` : ''}
+        <span class="flag">⚠ REPORTED</span>
       </div>
       ${s.info ? `<button class="info-btn" onclick="showInfo(${originalIndex})" aria-label="View details">i</button>` : ''}
     </article>`;
@@ -207,8 +220,18 @@ function render(filter='') {
 
 function showInfo(i) {
   const s = suppliers[i];
-  alert(`${s.name}\n\nReported Information:\n${s.info}`);
+  document.getElementById('modalTitle').textContent = s.name;
+  document.getElementById('modalInfo').textContent = s.info;
+  const modal = document.getElementById('reportModal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
 }
+function closeInfo() {
+  const modal = document.getElementById('reportModal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeInfo(); });
 
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
