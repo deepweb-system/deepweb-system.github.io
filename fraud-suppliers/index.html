@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KSA Supplier Watch — v2.0.2</title>
+<meta name="description" content="Community-reported KSA supplier payment and employment issue listing.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="paper">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">KSA • SUPPLIER WATCH</div>
+      <h1>Supplier Issue<br><span>Listing</span></h1>
+      <p class="lead">A simple reference list of supplier names associated with community-reported salary, payment, or other concerns.</p>
+    </div>
+    <div class="stamp">v2.0.2<br><small>Last update<br>20 Aug 2026</small></div>
+  </header>
+
+  <section class="notice">
+    <strong>⚠️ Important:</strong> These entries are <em>reports/claims</em>, not verified findings or legal judgments.
+    Some companies may have good reputations or may have resolved previous issues. Verify information independently before making employment or business decisions.
+  </section>
+
+  <section class="toolbar">
+    <div class="count"><b id="visibleCount">111</b> suppliers listed</div>
+    <input id="search" type="search" placeholder="Search supplier…" aria-label="Search suppliers">
+  </section>
+
+  <main id="list" class="list"></main>
+
+  <footer>
+    <div class="footer-card">
+      <div>
+        <div class="eyebrow">REPORT / UPDATE</div>
+        <h2>Found another supplier issue?</h2>
+        <p>If you have credible information about a reported payment or salary issue, contact the author on WhatsApp.</p>
+      </div>
+      <a class="wa" href="https://wa.me/966500896152" target="_blank" rel="noopener">WhatsApp Habibullah Muaz ↗</a>
+    </div>
+    <div class="meta">
+      <span>Author: <b>Habibullah Muaz</b></span>
+      <span>WhatsApp: <b>+966 50 089 6152</b></span>
+      <span>Location: <b>Jubail, Dammam, KSA</b></span>
+    </div>
+    <p class="tiny">Please submit evidence responsibly. Avoid publishing private personal information, accusations presented as fact, or unverifiable claims.</p>
+  </footer>
+</div>
+<script>
+const suppliers = [{"name": "ARD", "info": ""}, {"name": "Sahara Gen. Contracting", "info": "Payment issues"}, {"name": "Al-Faidi (Yanbu)", "info": ""}, {"name": "Gulf Globe Cont. (GGC)", "info": ""}, {"name": "Focus", "info": ""}, {"name": "MGC Tamimi", "info": ""}, {"name": "Dhabi Al Jubail", "info": ""}, {"name": "Dharat", "info": ""}, {"name": "Al Shaheen", "info": ""}, {"name": "Skyme", "info": ""}, {"name": "Lumac", "info": ""}, {"name": "Global Key", "info": ""}, {"name": "TSC Supply", "info": ""}, {"name": "Gulf Prix", "info": ""}, {"name": "Noor United Gen. Cont. Est.", "info": ""}, {"name": "Eiwan Al Jubail Gen. Est.", "info": ""}, {"name": "Brickstone", "info": ""}, {"name": "EAC", "info": "New name: Target Future"}, {"name": "GPC", "info": ""}, {"name": "Al Sadd Industrial Services", "info": ""}, {"name": "Umar Al Jubail", "info": ""}, {"name": "Vapcon Gen. Contracting", "info": ""}, {"name": "Mirza Supplier & Cont.", "info": ""}, {"name": "Sad Al Arabia", "info": ""}, {"name": "GreenDot", "info": ""}, {"name": "Explore the Future", "info": ""}, {"name": "Al Manar Supplier", "info": ""}, {"name": "NAYS Supplier", "info": ""}, {"name": "Gulf Mountain", "info": ""}, {"name": "Fast Way Arabia", "info": ""}, {"name": "ANCC", "info": ""}, {"name": "Emad Nayed Al Rasheed", "info": ""}, {"name": "NMC Gen. Contracting", "info": ""}, {"name": "Golden Flag", "info": ""}, {"name": "Global Industrial Solutions", "info": ""}, {"name": "Naif Al Anazi", "info": ""}, {"name": "MSH", "info": ""}, {"name": "Iscom", "info": ""}, {"name": "Safe Arabia", "info": ""}, {"name": "Green Engineering Const. Co.", "info": ""}, {"name": "GGC Global Value Co.", "info": ""}, {"name": "Bright Solution", "info": ""}, {"name": "Bright Arabia", "info": ""}, {"name": "AMA Ali Mohsan", "info": ""}, {"name": "Firststep", "info": ""}, {"name": "Al Balatin", "info": ""}, {"name": "Prompt", "info": ""}, {"name": "Agror Gen. Contracting", "info": ""}, {"name": "Multi Nova Engineering Services", "info": ""}, {"name": "Sit Arabian Cont. Co. Ltd.", "info": ""}, {"name": "A Silver Cont. Est.", "info": ""}, {"name": "Utilities & Industrial Power Services", "info": ""}, {"name": "Bright Plus Cont. Est.", "info": ""}, {"name": "Middle East Star Gen. Cont. Co.", "info": ""}, {"name": "FASTEC", "info": ""}, {"name": "Al-Isha Cont. Est.", "info": ""}, {"name": "ANFA Engineering", "info": ""}, {"name": "Future Ambition Cont. Co.", "info": ""}, {"name": "Sebsco", "info": ""}, {"name": "Sumoua", "info": ""}, {"name": "Core Team", "info": ""}, {"name": "Value Star", "info": ""}, {"name": "MAAS Industrial Services", "info": ""}, {"name": "NABATAT Cont. Co.", "info": ""}, {"name": "Telekom Co. MK", "info": ""}, {"name": "Eastern Link Gen. Cont. Est.", "info": ""}, {"name": "MMGC Supplier", "info": "Unpaid: 4 months"}, {"name": "Ex Elitex", "info": ""}, {"name": "AMF Gen. Cont. Co.", "info": ""}, {"name": "Titan Cont. Co.", "info": ""}, {"name": "Jamal Jaafar Jamal Cont. Est.", "info": ""}, {"name": "Spire", "info": ""}, {"name": "Middle Bahrain Cont. Est. (MBCE)", "info": ""}, {"name": "ADNOC Arabia (O&M)", "info": ""}, {"name": "Ajasco", "info": ""}, {"name": "Sinopec", "info": ""}, {"name": "Allied Star", "info": ""}, {"name": "Whitepaper", "info": "Unpaid: 3 months"}, {"name": "Rasha", "info": ""}, {"name": "Fmfyc Co.", "info": ""}, {"name": "Elite Support Cont. Co. LLC", "info": ""}, {"name": "Craft Innovation Cont.", "info": "Unpaid: 10 months"}, {"name": "Altayar Nahdat Cont. Co.", "info": "Unpaid: 4 months"}, {"name": "JVR Global Co.", "info": "Fraud reported"}, {"name": "Smartech", "info": "Payment issues"}, {"name": "Alkaabi", "info": "Unpaid: 10 months"}, {"name": "Amaziy Global Ltd. Co.", "info": "Salary issues"}, {"name": "Middle East Cont. Co.", "info": "Unpaid: 8 months"}, {"name": "Sinohydro", "info": "Salary issues"}, {"name": "MEG Mubadala East Gen. Cont. Co.", "info": "Salary issues"}, {"name": "Expert Arabia", "info": "Unpaid: 6 months"}, {"name": "Innovative Solutions", "info": "Salary issues"}, {"name": "Msquare", "info": "Unpaid: 8 months"}, {"name": "Saleh Faraj Al Amiri Al Khaldi (G.E.C)", "info": ""}, {"name": "ASB Shamukh Al Barzco", "info": "Unpaid: 6 months"}, {"name": "Saqco Arabia (Khobar)", "info": "Non-payment"}, {"name": "Makhavi Arabia", "info": ""}, {"name": "ISD", "info": ""}, {"name": "Primera", "info": ""}, {"name": "Green Asia", "info": ""}, {"name": "Zuwa Group", "info": "Delayed payments"}, {"name": "The Choice Supplier", "info": ""}, {"name": "Skywalk", "info": "Unpaid: 5 months (Anabeeb)"}, {"name": "BEC Bnyan Alinjaz", "info": ""}, {"name": "SWC", "info": ""}, {"name": "Moosa Abdul Kareem", "info": "Unpaid: 3 months (Anabeeb)"}, {"name": "ATC Supply (near Sony Mosque)", "info": ""}, {"name": "EMARABIA Global", "info": "Unpaid: 4 months"}, {"name": "ELITE Oasis Co Cont. EST", "info": ""}, {"name": "Al Waseet Adhbi", "info": "Unpaid: 5 months (Anabeeb)"}, {"name": "NBS General Contracting", "info": ""}];
+const list = document.getElementById('list');
+const search = document.getElementById('search');
+const count = document.getElementById('visibleCount');
+
+function render(filter='') {
+  const q = filter.trim().toLowerCase();
+  const rows = suppliers.filter(s => (s.name + ' ' + s.info).toLowerCase().includes(q));
+  count.textContent = rows.length;
+  list.innerHTML = rows.map((s, idx) => {
+    const original = suppliers.indexOf(s) + 1;
+    return `<article class="supplier">
+      <div class="num">${String(original).padStart(2,'0')}</div>
+      <div class="name">${escapeHtml(s.name)} ${s.info ? '<span class="flag">REPORTED</span>' : ''}</div>
+      ${s.info ? `<button class="info" onclick="showInfo(${original-1})" aria-label="View information">i</button>` : ''}
+    </article>`;
+  }).join('') || '<div class="empty">No supplier found.</div>';
+}
+function showInfo(i) {
+  const s = suppliers[i];
+  alert(s.name + "\n\nReported information:\n" + s.info + "\n\nThis is a community report and should be independently verified.");
+}
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+search.addEventListener('input', e => render(e.target.value));
+render();
+</script>
+</body>
+</html>
