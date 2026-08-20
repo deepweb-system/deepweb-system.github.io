@@ -357,3 +357,58 @@ footer {
   .footer-contact { flex-direction: column; align-items: flex-start; }
   .wa-btn { width: 100%; justify-content: center; }
 }
+
+/* Sticky Bottom Note Bar */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--card2);
+  border-top: 1px solid var(--line);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+  z-index: 50;
+}
+
+.sticky-bar span {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.submit-btn {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--danger);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Prevent content from being hidden behind the sticky bar */
+body {
+  padding-bottom: 80px; 
+}
+
+@media(max-width: 700px) {
+  body { padding-bottom: 80px; }
+  .sticky-bar span { font-size: 11px; }
+  .submit-btn { font-size: 11px; padding: 7px 12px; }
+}
+
