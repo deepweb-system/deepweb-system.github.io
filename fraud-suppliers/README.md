@@ -2,6 +2,7 @@
 
 Minimal paper-style static website for a community-reported KSA supplier office list.
 
+[visit for more info!](https://deepweb-system.github.io/fraud-suppliers)
 - Version: v2.0.2
 - Last update: 20 August 2026
 - Author: Habibullah Muaz
