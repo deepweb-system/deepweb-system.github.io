@@ -55,13 +55,6 @@
   </div>
 
   <footer>
-    <div class="footer-contact">
-      <div>
-        <strong style="font-size: 15px; color: var(--text-main);">Have a supplier update or report?</strong>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Submit verifiable updates directly via WhatsApp.</p>
-      </div>
-      <a class="wa-btn" href="https://wa.me/966500896152" target="_blank" rel="noopener">WhatsApp Author ↗</a>
-    </div>
     <div class="copyright">
       <span id="copyrightText"></span>
     </div>
@@ -263,6 +256,18 @@ function toggleTheme() {
 
 search.addEventListener('input', e => render(e.target.value));
 render();
+  // Pop-up alert for submitting new reports
+function triggerReportPopup() {
+  alert("⚠️ SUBMISSION NOTICE:\n\nPlease ensure you have the supplier name and verifiable evidence of payment/salary issues ready.\n\nClick OK to proceed to WhatsApp.");
+  window.open("https://wa.me/966500896152", "_blank", "noopener");
+}
 </script>
+  <!-- Sticky Downsite Note Bar -->
+<div class="sticky-bar">
+  <span>... want to add more fraud supply?</span>
+  <button class="submit-btn" onclick="triggerReportPopup()">
+    ℹ️ Submit Here
+  </button>
+</div>
 </body>
 </html>
