@@ -51,7 +51,7 @@
   <text class="main-text" x="50%" y="70" dy=".35em" text-anchor="middle">
     SCRIPT BOT
   </text>
-  <text class="sub-text" x="30%" y="125" text-anchor="right">
+  <text class="sub-text" x="50%" y="125" text-anchor="middle">
     ©Powered by Muaz
   </text>
 </svg>
