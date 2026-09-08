@@ -69,6 +69,121 @@
             100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
         }
 
+        /* Blur Overlay Modal for Love Question */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 5, 18, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 1;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .modal-card {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 28px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scale(1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-card .heart-icon {
+            font-size: 3rem;
+            color: var(--accent-rose);
+            margin-bottom: 20px;
+            animation: heartPulse 1.5s infinite ease-in-out;
+            text-shadow: 0 0 20px var(--glow-color);
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.18); }
+        }
+
+        .modal-question {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            line-height: 1.4;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-wrap: balance;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .modal-question.fade-swap {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal {
+            padding: 14px 32px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--accent-rose), #d946ef);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(255, 117, 140, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(255, 117, 140, 0.6);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-sub);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-no:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+        }
+
         /* Main Container */
         .container {
             max-width: 820px;
@@ -84,7 +199,14 @@
                         inset 0 1px 0 rgba(255, 255, 255, 0.15);
             border: 1px solid var(--card-border);
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
         /* Header Styling */
@@ -243,33 +365,46 @@
             transform: scale(1.25);
         }
 
-        /* Interactive Hidden Message Accordion */
-        .hidden-message {
-            max-height: 0;
+        /* Perfectly Auto-Fitting Interactive Accordion */
+        .hidden-message-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.6s cubic-bezier(0.16, 1, 0.3, 1), margin-top 0.4s ease, opacity 0.5s ease;
             opacity: 0;
+            margin-top: 0;
+        }
+
+        .hidden-message-wrapper.active {
+            grid-template-rows: 1fr;
+            opacity: 1;
+            margin-top: 25px;
+        }
+
+        .hidden-message-content {
             overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hidden-message-card {
             background: rgba(255, 133, 162, 0.05);
             border-radius: 20px;
-            border: 1px solid transparent;
-            margin: 0 auto;
-        }
-
-        .hidden-message.active {
-            max-height: 300px;
-            opacity: 1;
-            padding: 28px 32px;
-            margin-top: 20px;
-            border-color: rgba(255, 133, 162, 0.2);
+            border: 1px solid rgba(255, 133, 162, 0.2);
+            padding: 30px 35px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(15px);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .hidden-message p {
+        .hidden-message-wrapper.active .hidden-message-card {
+            transform: translateY(0);
+        }
+
+        .hidden-message-card p {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             line-height: 1.7;
             color: #ffe6ee;
             font-style: italic;
+            text-wrap: balance;
         }
 
         /* Signature Section */
@@ -354,6 +489,10 @@
             .signature-title {
                 font-size: 2.4rem;
             }
+
+            .hidden-message-card {
+                padding: 22px 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -369,6 +508,14 @@
                 font-size: 1rem;
                 padding: 14px 20px;
             }
+
+            .modal-card {
+                padding: 30px 20px;
+            }
+
+            .modal-question {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -380,7 +527,24 @@
     <!-- Smooth Dynamic Particle Canvas -->
     <canvas id="bgCanvas"></canvas>
 
-    <div class="container">
+    <!-- Love Prompt Popup Overlay -->
+    <div class="modal-overlay" id="loveModalOverlay">
+        <div class="modal-card">
+            <div class="heart-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="modal-question" id="modalQuestionText">
+                Do you love Muaz? ❤️
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-modal btn-yes" id="btnYes">Yes</button>
+                <button class="btn-modal btn-no" id="btnNo">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container" id="mainContainer">
         
         <div class="header-container">
             <div class="heart-badge">
@@ -406,9 +570,13 @@
             </div>
         </div>
 
-        <!-- Hidden accordion message -->
-        <div class="hidden-message" id="hiddenMessage">
-            <p><i class="fas fa-quote-left" style="color: var(--accent-rose); margin-right: 8px; opacity: 0.7;"></i> I promise to cherish every laugh, support you through every challenge, celebrate every victory, and love you more with each passing day. Together, we can build a future filled with shared dreams and unforgettable moments. You are my always and forever.</p>
+        <!-- Perfect Auto-Fit Hidden Accordion Message -->
+        <div class="hidden-message-wrapper" id="hiddenMessageWrapper">
+            <div class="hidden-message-content">
+                <div class="hidden-message-card">
+                    <p><i class="fas fa-quote-left" style="color: var(--accent-rose); margin-right: 8px; opacity: 0.7;"></i> I promise to cherish every laugh, support you through every challenge, celebrate every victory, and love you more with each passing day. Together, we can build a future filled with shared dreams and unforgettable moments. You are my always and forever.</p>
+                </div>
+            </div>
         </div>
 
         <div class="signature-container">
@@ -424,20 +592,160 @@
     </div>
 
     <script>
-        // Interactive Toggle Functionality
+        // 100 Sequenced Persuasive Messages Array
+        const noMessages = [
+            "Are you sure? 🥺",
+            "I think you love Muaz! ❤️",
+            "I'm sure you're just kidding rn, you actually love me! 😉",
+            "I think you love me! 💕",
+            "I am damn sure you love me! 🥰",
+            "Are you really, really sure? 🤔",
+            "Think about it again! 💭",
+            "Don't break my heart like this! 💔",
+            "Reconsidering yet? 💖",
+            "You know you love me! 😘",
+            "Are you 100% sure? 🧐",
+            "Try clicking Yes instead! ✨",
+            "Is that your final answer? 🌹",
+            "Are you positive? 🌸",
+            "Come on, say Yes! 🥺",
+            "Look into your heart! ❤️",
+            "Stop playing around! 😂❤️",
+            "You're totally smiling right now, aren't you? 😊",
+            "You can't fool me! 😜",
+            "Press Yes, you know you want to! 💕",
+            "Are you 1000% sure? 💖",
+            "Think of all our memories! 📸",
+            "My heart just skipped a beat, press Yes! 💓",
+            "You know Muaz loves you, right? 🥰",
+            "Is there really no doubt in your mind? 🌹",
+            "I think the 'No' button is broken, try 'Yes'! 😉",
+            "Pretty please with a cherry on top? 🍒",
+            "Don't be shy! 😘",
+            "You're just testing my patience, aren't you? 😜",
+            "I will keep asking until you say Yes! 💖",
+            "Still saying No? Impossible! 😮",
+            "Give it one more thought! 🌺",
+            "Are you secretly smiling at this? 😏",
+            "Saying Yes will make your day better! ✨",
+            "I am 10000% sure you love me! ❤️",
+            "Wrong button! Try the pink one on the left! 👈",
+            "Wait, think about it one more time! 💭",
+            "You know we are perfect together! 💕",
+            "Come on, Nana! 🥺",
+            "You're clicking No on purpose now! 😂",
+            "Are you sure sure sure? 🙈",
+            "I bet you can't resist saying Yes! 😘",
+            "Just click Yes already! 💖",
+            "I am damn sure you love Muaz! 🥰",
+            "Are you holding out for a romantic speech? 🎤",
+            "You are my absolute favorite person! 🌟",
+            "Give in to the love! 💕",
+            "You're making the 'Yes' button sad! 🥺",
+            "Clicking No won't change the truth! 😉",
+            "I know you love me! 💖",
+            "Are you really gonna keep pressing No? 😜",
+            "Imagine how happy Muaz will be when you say Yes! 🥰",
+            "The universe says you love me! 🌌",
+            "Even the stars agree you love Muaz! ⭐",
+            "Don't deny it any longer! 💗",
+            "Are you playing hard to get? 😏",
+            "Say Yes for free warm hugs! 🫂",
+            "You're halfway through my traps, just press Yes! 😂",
+            "Okay, what if I ask really nicely? 🥺❤️",
+            "Are you still sure? 🌺",
+            "I'm not giving up that easily! 💕",
+            "You mean the world to Muaz, say Yes! 💖",
+            "Pressing No is scientifically proven to be incorrect! 🔬😉",
+            "Listen to your heart! 💓",
+            "Are you almost ready to click Yes? 🥰",
+            "You're standard-issue adorable, say Yes! 💖",
+            "I'm gonna run out of questions, but not love! 🌹",
+            "Clicking Yes gives you endless happiness! ✨",
+            "Are you sure you want to stick with No? 🥺",
+            "You love me, I know it! 😘",
+            "You're totally clicking No just to read these! 😂",
+            "Admit it, these messages are working! 😉",
+            "Say Yes already, my dearest Nana! ❤️",
+            "Can't bypass my love algorithm! 💻💖",
+            "Are you still hovering over No? 🙈",
+            "Press Yes and unlock the main page! 🔑✨",
+            "Muaz + Nana = Forever 💕",
+            "Still No? You're stubborn! (In a cute way) 😂❤️",
+            "I know deep down it's a big YES! 🥰",
+            "Pretty please? 🥺🌸",
+            "Your finger slipped, right? Try Yes! 👈",
+            "I am 1,000,000% sure you love me! 💗",
+            "Are you testing my persistence? I win! 😉",
+            "Click Yes to accept all the love! 🎁",
+            "You know you want to press Yes! 💕",
+            "Are you sure, final final answer? 🧐",
+            "Don't leave Muaz hanging! 🥺",
+            "You're getting closer to saying Yes! ✨",
+            "Just one tiny click on Yes! 💖",
+            "I'll wait right here until you click Yes! ⏳❤️",
+            "Are you ready now? 🥰",
+            "Say Yes to the best friend ever! 🌟",
+            "You can't escape the truth! 💖",
+            "Almost there, just hit Yes! 😉",
+            "Is that a Yes I see coming? 🥺",
+            "You love Muaz, say Yes! ❤️",
+            "No is not an option anymore! 😂",
+            "Okay, last chance to click Yes easily! 💕",
+            "I think you love me more than ever now! 🥰",
+            "Fine, you leave me no choice: YOU LOVE MUAZ! Click Yes! ❤️"
+        ];
+
+        let msgIndex = 0;
+        let yesScale = 1;
+
+        const loveModalOverlay = document.getElementById('loveModalOverlay');
+        const modalQuestionText = document.getElementById('modalQuestionText');
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const mainContainer = document.getElementById('mainContainer');
+
+        // Handle "No" Button Click Sequence
+        btnNo.addEventListener('click', () => {
+            msgIndex = (msgIndex + 1) % noMessages.length;
+            
+            // Make "Yes" button progressively grow to tempt user
+            yesScale += 0.08;
+            if (yesScale > 2.2) yesScale = 2.2;
+            btnYes.style.transform = `scale(${yesScale})`;
+
+            // Smooth text swap animation
+            modalQuestionText.classList.add('fade-swap');
+            setTimeout(() => {
+                modalQuestionText.textContent = noMessages[msgIndex];
+                modalQuestionText.classList.remove('fade-swap');
+            }, 180);
+
+            // Playful button shift
+            btnNo.style.transform = `translate(${(Math.random() - 0.5) * 20}px, ${(Math.random() - 0.5) * 10}px)`;
+        });
+
+        // Handle "Yes" Button Click Sequence
+        btnYes.addEventListener('click', () => {
+            loveModalOverlay.classList.add('hidden');
+            mainContainer.classList.add('visible');
+            createSparkles(25);
+        });
+
+        // Interactive Accordion Toggle Functionality
         const toggleBtn = document.getElementById('toggleBtn');
-        const hiddenMessage = document.getElementById('hiddenMessage');
+        const hiddenMessageWrapper = document.getElementById('hiddenMessageWrapper');
         const btnText = document.getElementById('btnText');
         let isOpen = false;
 
         toggleBtn.addEventListener('click', () => {
             isOpen = !isOpen;
             if (isOpen) {
-                hiddenMessage.classList.add('active');
+                hiddenMessageWrapper.classList.add('active');
                 btnText.textContent = "And I will always cherish you";
-                createSparkles(12);
+                createSparkles(15);
             } else {
-                hiddenMessage.classList.remove('active');
+                hiddenMessageWrapper.classList.remove('active');
                 btnText.textContent = "You mean the world to me";
             }
         });
@@ -501,27 +809,26 @@
         }
         animateParticles();
 
-        // Extra Burst Effect on Click
+        // Extra Burst Particle Animation
         function createSparkles(count) {
-            const rect = toggleBtn.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
 
             for (let i = 0; i < count; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.style.position = 'fixed';
                 sparkle.style.left = centerX + 'px';
                 sparkle.style.top = centerY + 'px';
-                sparkle.style.width = '6px';
-                sparkle.style.height = '6px';
+                sparkle.style.width = '8px';
+                sparkle.style.height = '8px';
                 sparkle.style.backgroundColor = '#ff85a2';
                 sparkle.style.borderRadius = '50%';
                 sparkle.style.pointerEvents = 'none';
-                sparkle.style.zIndex = '100';
-                sparkle.style.boxShadow = '0 0 10px #ff85a2';
+                sparkle.style.zIndex = '1200';
+                sparkle.style.boxShadow = '0 0 12px #ff85a2';
 
-                const destinationX = (Math.random() - 0.5) * 200;
-                const destinationY = (Math.random() - 0.5) * 200;
+                const destinationX = (Math.random() - 0.5) * 350;
+                const destinationY = (Math.random() - 0.5) * 350;
 
                 document.body.appendChild(sparkle);
 
@@ -529,7 +836,7 @@
                     { transform: 'translate(0, 0) scale(1)', opacity: 1 },
                     { transform: `translate(${destinationX}px, ${destinationY}px) scale(0)`, opacity: 0 }
                 ], {
-                    duration: 1000 + Math.random() * 500,
+                    duration: 1200 + Math.random() * 600,
                     easing: 'cubic-bezier(0, .9, .57, 1)'
                 });
 
