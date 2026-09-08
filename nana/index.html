@@ -16,9 +16,6 @@
             --text-main: #fceef3;
             --text-sub: #d3c4d1;
             --glow-color: rgba(255, 117, 140, 0.25);
-            
-            /* Apple Emoji Priority Font Stack */
-            --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
 
         /* Prevent Text Selection, Copying & Long-Press Menus Entirely */
@@ -34,11 +31,22 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Apple Emoji Styling */
+        .apple-emoji {
+            width: 1.25em;
+            height: 1.25em;
+            vertical-align: -0.22em;
+            display: inline-block;
+            object-fit: contain;
+            pointer-events: none;
+            margin: 0 2px;
+        }
+
         /* Hide Browser Scrollbar Across All Browsers */
         html, body {
             -ms-overflow-style: none; /* IE & Edge */
             scrollbar-width: none; /* Firefox */
-            touch-action: pan-x pan-y;
+            touch-action: pan-y; /* Allows vertical pull-to-refresh swipe */
         }
 
         ::-webkit-scrollbar {
@@ -47,18 +55,18 @@
             height: 0;
         }
 
-        /* Lock background scrolling until pop-up is dismissed */
+        /* Lock background scrolling while preserving swipe-to-refresh */
         body.no-scroll {
             overflow: hidden !important;
             height: 100vh !important;
             height: 100dvh !important;
-            touch-action: none !important;
+            touch-action: pan-y !important; /* Enables swipe to refresh on mobile */
         }
 
         body {
             background: var(--bg-gradient);
             color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             min-height: 100dvh;
             overflow-x: hidden;
@@ -108,7 +116,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Accounts for mobile search bars & browser chrome */
+            height: 100dvh;
             background: rgba(8, 4, 15, 0.65);
             backdrop-filter: blur(20px) saturate(160%);
             -webkit-backdrop-filter: blur(20px) saturate(160%);
@@ -119,7 +127,7 @@
             padding: 20px;
             opacity: 1;
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
-            touch-action: none;
+            touch-action: pan-y; /* Keeps swipe to refresh enabled */
         }
 
         .modal-overlay.hidden {
@@ -148,13 +156,16 @@
             justify-content: center;
         }
 
-        .modal-card .heart-icon {
-            font-size: 3rem;
+        /* Pure Icon Heart Shape (No Emoji) */
+        .modal-card .heart-icon-shape {
+            font-size: 2.8rem;
             color: var(--accent-rose);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             animation: heartPulse 1.5s infinite ease-in-out;
-            text-shadow: 0 0 20px var(--glow-color);
-            font-family: var(--font-emoji);
+            filter: drop-shadow(0 0 15px var(--glow-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @keyframes heartPulse {
@@ -163,7 +174,7 @@
         }
 
         .modal-question {
-            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.8rem;
             color: var(--text-main);
             margin-bottom: 30px;
@@ -194,7 +205,7 @@
 
         .btn-modal {
             padding: 14px 32px;
-            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.1rem;
             font-weight: 600;
             border-radius: 100px;
@@ -306,7 +317,7 @@
         }
 
         h1 {
-            font-family: 'Alex Brush', var(--font-emoji), cursive;
+            font-family: 'Alex Brush', cursive;
             font-size: 4rem;
             line-height: 1.2;
             font-weight: 400;
@@ -318,7 +329,7 @@
         }
 
         .subtitle {
-            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.35rem;
             font-style: italic;
             color: var(--text-sub);
@@ -328,7 +339,7 @@
 
         /* Message Box */
         .message-box {
-            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.45rem;
             line-height: 1.8;
             margin: 35px 0;
@@ -379,7 +390,7 @@
         }
 
         .single-line-text {
-            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.5rem;
             font-weight: 500;
             color: #ffffff;
@@ -449,7 +460,7 @@
         }
 
         .hidden-message-card p {
-            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.35rem;
             line-height: 1.7;
             color: #ffe6ee;
@@ -469,14 +480,14 @@
         }
 
         .signature-title {
-            font-family: 'Alex Brush', var(--font-emoji), cursive;
+            font-family: 'Alex Brush', cursive;
             font-size: 3rem;
             color: #ffe0eb;
             line-height: 1.1;
         }
 
         .signature-sub {
-            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.15rem;
             letter-spacing: 1.5px;
             color: var(--text-sub);
@@ -580,11 +591,12 @@
     <!-- Love Prompt Modal Overlay with Frosted Glass Card -->
     <div class="modal-overlay" id="loveModalOverlay">
         <div class="modal-card">
-            <div class="heart-icon">
-                ❤️
+            <!-- Pure Icon Heart Shape (NO text emoji) -->
+            <div class="heart-icon-shape">
+                <i class="fas fa-heart"></i>
             </div>
             <div class="modal-question" id="modalQuestionText">
-                Do you love Muaz? ❤️
+                <!-- Inner HTML injected dynamically with real Apple Emoji images -->
             </div>
             <div class="modal-buttons">
                 <button class="btn-modal btn-yes" id="btnYes">Yes</button>
@@ -642,7 +654,24 @@
     </div>
 
     <script>
-        // STRICTLY PREVENT COPY, LONG PRESS, CONTEXT MENU & ZOOMING
+        // --- REAL APPLE EMOJI CONVERTER ENGINE ---
+        // Converts text emojis to actual Apple Emoji images (works on Chrome, Windows, Android, Linux, Mac)
+        function renderAppleEmojiText(text) {
+            const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])/g;
+            return text.replace(emojiRegex, (emoji) => {
+                const codePoints = [];
+                for (const char of emoji) {
+                    const code = char.codePointAt(0).toString(16);
+                    if (code !== 'fe0f') { // strip optional variation selector
+                        codePoints.push(code);
+                    }
+                }
+                const hex = codePoints.join('-');
+                return `<img class="apple-emoji" src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.0.1/img/apple/64/${hex}.png" alt="${emoji}" draggable="false" />`;
+            });
+        }
+
+        // --- STRICT SECURITY: PREVENT COPY, CONTEXT MENU, LONG-PRESS, KEYBOARD & TOUCH ZOOM ---
         
         // Disable Right-Click Context Menu
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -652,28 +681,29 @@
         document.addEventListener('cut', e => e.preventDefault());
         document.addEventListener('selectstart', e => e.preventDefault());
 
-        // Disable Inspect Element and Copy Keyboard Shortcuts
+        // Disable Inspect Element, Copy & Zoom Keyboard Shortcuts
         document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a', 'p', 'i', 'j'].includes(e.key.toLowerCase())) {
+            const k = e.key.toLowerCase();
+            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a', 'p', 'i', 'j'].includes(k)) {
                 e.preventDefault();
             }
             // Prevent Keyboard Zoom (Ctrl + '+' / '-' / '0')
-            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(k)) {
                 e.preventDefault();
             }
         });
 
-        // Prevent Touch Pinch Zoom
+        // Prevent Touch Multi-finger Pinch Zoom (Allows single-touch swipe down to refresh)
         document.addEventListener('touchmove', e => {
             if (e.touches.length > 1) {
                 e.preventDefault();
             }
         }, { passive: false });
 
-        // Prevent Gesture Zoom on Safari
+        // Prevent Safari Gesture Zooming
         document.addEventListener('gesturestart', e => e.preventDefault());
 
-        // Prevent Wheel Zoom with Ctrl Key
+        // Prevent Mouse Wheel Ctrl Zoom
         document.addEventListener('wheel', e => {
             if (e.ctrlKey) {
                 e.preventDefault();
@@ -681,8 +711,10 @@
         }, { passive: false });
 
 
-        // POPUP QUESTION SEQUENCING & LOGIC
+        // --- POPUP QUESTION SEQUENCING & APPLE EMOJI LOGIC ---
         
+        const initialQuestion = "Do you love Muaz? ❤️";
+
         // FIXED First 3 Follow-Up Questions
         const fixedFirstQuestions = [
             "Are you sure? 🥺",
@@ -801,6 +833,9 @@
         const btnNo = document.getElementById('btnNo');
         const mainContainer = document.getElementById('mainContainer');
 
+        // Set Initial Question with Apple Emoji
+        modalQuestionText.innerHTML = renderAppleEmojiText(initialQuestion);
+
         // Handle "No" Button Click Sequence
         btnNo.addEventListener('click', () => {
             noPressCount++;
@@ -815,7 +850,7 @@
             } else if (noPressCount === 3) {
                 nextQuestion = fixedFirstQuestions[2];
             } 
-            // 2. On 100th press (or beyond), show the FIXED final question & make "No" disappear
+            // 2. On 100th press (or beyond), show the FIXED final question
             else if (noPressCount >= totalMaxPresses) {
                 nextQuestion = finalQuestion;
             } 
@@ -825,7 +860,7 @@
                 nextQuestion = randomQuestionsPool[randomIndex];
             }
 
-            // Shrink "No" button progressively smaller and smaller
+            // Shrink "No" button progressively smaller
             const noScale = Math.max(0, 1 - (noPressCount / totalMaxPresses));
             btnNo.style.transform = `scale(${noScale})`;
             btnNo.style.opacity = noScale;
@@ -834,26 +869,26 @@
             const yesScale = 1 + (noPressCount * 0.008);
             btnYes.style.transform = `scale(${Math.min(yesScale, 1.8)})`;
 
-            // On or after 100th press, disappear "No" button completely so only "Yes" remains
+            // Disappear "No" button completely if scaled down to zero or reached max press count
             if (noPressCount >= totalMaxPresses || noScale <= 0.01) {
                 btnNo.style.display = 'none';
                 btnYes.style.transform = 'scale(1.3)';
             }
 
-            // Smooth text transition
+            // Smooth text transition with Apple Emoji rendering
             modalQuestionText.classList.add('fade-swap');
             setTimeout(() => {
-                modalQuestionText.textContent = nextQuestion;
+                modalQuestionText.innerHTML = renderAppleEmojiText(nextQuestion);
                 modalQuestionText.classList.remove('fade-swap');
             }, 180);
         });
 
-        // Handle "Yes" Button Click (Unlocks Scrolling and Unveils Content)
+        // Handle "Yes" Button Click (Unlocks Scrolling and Unveils Main Content)
         btnYes.addEventListener('click', () => {
             loveModalOverlay.classList.add('hidden');
             mainContainer.classList.add('visible');
             
-            // Remove background scroll lock
+            // Unlocks main page scrolling while retaining swipe-to-refresh
             document.body.classList.remove('no-scroll');
             
             createSparkles(30);
