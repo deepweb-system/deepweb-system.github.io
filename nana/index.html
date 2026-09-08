@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dearest Nana ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 20%, #20102b 0%, #0d0814 60%, #050308 100%);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 215, 230, 0.12);
+            --accent-rose: #ff85a2;
+            --accent-gold: #f7d070;
+            --text-main: #fceef3;
+            --text-sub: #d3c4d1;
+            --glow-color: rgba(255, 117, 140, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Interactive Particle Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Ambient Glow Effect */
+        .ambient-glow {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.15) 0%, rgba(147, 51, 234, 0.08) 40%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 1;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 820px;
+            width: 100%;
+            padding: 55px 45px;
+            position: relative;
+            z-index: 10;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--card-border);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Header Styling */
+        .header-container {
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .header-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-rose), transparent);
+        }
+
+        .heart-badge {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            background: rgba(255, 133, 162, 0.1);
+            border: 1px solid rgba(255, 133, 162, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-rose);
+            font-size: 18px;
+            box-shadow: 0 0 20px var(--glow-color);
+            animation: badgeFloat 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes badgeFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-6px); }
+        }
+
+        /* Perfect Balanced Line Breaks */
+        h1, .subtitle, .message-box p, .single-line-text, .signature-title, .signature-sub {
+            text-wrap: balance;
+            word-break: normal;
+            overflow-wrap: break-word;
+        }
+
+        h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 30%, #ffb3c6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 179, 198, 0.3);
+        }
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--text-sub);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+
+        /* Message Box */
+        .message-box {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.45rem;
+            line-height: 1.8;
+            margin: 35px 0;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .message-box p {
+            margin-bottom: 24px;
+            color: var(--text-main);
+        }
+
+        .message-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: var(--accent-rose);
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent-rose);
+            opacity: 0.5;
+        }
+
+        /* Single Line / Hero Banner Box */
+        .single-line-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0 25px 0;
+            cursor: pointer;
+        }
+
+        .single-line-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #ffffff;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, rgba(255, 117, 140, 0.25), rgba(217, 70, 239, 0.25));
+            border-radius: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .single-line-text:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(255, 117, 140, 0.35),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 182, 193, 0.6);
+        }
+
+        .single-line-text i {
+            color: var(--accent-rose);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .single-line-text:hover i {
+            transform: scale(1.25);
+        }
+
+        /* Interactive Hidden Message Accordion */
+        .hidden-message {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(255, 133, 162, 0.05);
+            border-radius: 20px;
+            border: 1px solid transparent;
+            margin: 0 auto;
+        }
+
+        .hidden-message.active {
+            max-height: 300px;
+            opacity: 1;
+            padding: 28px 32px;
+            margin-top: 20px;
+            border-color: rgba(255, 133, 162, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden-message p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #ffe6ee;
+            font-style: italic;
+        }
+
+        /* Signature Section */
+        .signature-container {
+            margin-top: 45px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .signature-title {
+            font-family: 'Alex Brush', cursive;
+            font-size: 3rem;
+            color: #ffe0eb;
+            line-height: 1.1;
+        }
+
+        .signature-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            letter-spacing: 1.5px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .date {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 35px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        .footer i {
+            color: var(--accent-rose);
+            margin: 0 4px;
+        }
+
+        /* Responsiveness & Precise Formatting */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                padding: 35px 22px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .subtitle {
+                font-size: 1.15rem;
+            }
+
+            .message-box {
+                font-size: 1.2rem;
+                padding: 25px 20px;
+                margin: 25px 0;
+            }
+
+            .single-line-text {
+                font-size: 1.15rem;
+                padding: 16px 28px;
+                width: 100%;
+            }
+
+            .signature-title {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .message-box {
+                font-size: 1.1rem;
+            }
+
+            .single-line-text {
+                font-size: 1rem;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Lighting Element -->
+    <div class="ambient-glow"></div>
+
+    <!-- Smooth Dynamic Particle Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="container">
+        
+        <div class="header-container">
+            <div class="heart-badge">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h1>For My Loving Best Friend Nana</h1>
+            <div class="subtitle">Every moment with you is a treasure beyond measure</div>
+        </div>
+
+        <div class="message-box">
+            <p>My dearest Nana, from the very first moment our paths crossed, you've brought a special light into my world that I never knew was missing. Your laughter is my favorite melody, your kindness my greatest inspiration, and your presence the comfort I always seek.</p>
+            
+            <p>With you, ordinary days transform into extraordinary memories. You see the best in me even when I can't see it myself. You are not just my best friend; you are the <span class="highlight">missing piece</span> that makes my life feel complete, the calm in my chaos, and the joy in my everyday.</p>
+            
+            <p>In your eyes, I've found a reflection of everything beautiful in this world. In your heart, I've discovered a home I never want to leave. What we share is rare and precious—a connection that transcends friendship and touches the very soul.</p>
+        </div>
+
+        <!-- Single Line interactive button -->
+        <div class="single-line-container">
+            <div class="single-line-text" id="toggleBtn">
+                <span id="btnText">You mean the world to me</span>
+                <i class="fas fa-heart" id="btnIcon"></i>
+            </div>
+        </div>
+
+        <!-- Hidden accordion message -->
+        <div class="hidden-message" id="hiddenMessage">
+            <p><i class="fas fa-quote-left" style="color: var(--accent-rose); margin-right: 8px; opacity: 0.7;"></i> I promise to cherish every laugh, support you through every challenge, celebrate every victory, and love you more with each passing day. Together, we can build a future filled with shared dreams and unforgettable moments. You are my always and forever.</p>
+        </div>
+
+        <div class="signature-container">
+            <div class="signature-title">With All My Heart</div>
+            <div class="signature-sub">Your Best Friend & Secret Admirer</div>
+            <div class="date">Forever & Always</div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Created with <i class="fas fa-heart"></i> by Muaz | Dedicated to Nana
+    </div>
+
+    <script>
+        // Interactive Toggle Functionality
+        const toggleBtn = document.getElementById('toggleBtn');
+        const hiddenMessage = document.getElementById('hiddenMessage');
+        const btnText = document.getElementById('btnText');
+        let isOpen = false;
+
+        toggleBtn.addEventListener('click', () => {
+            isOpen = !isOpen;
+            if (isOpen) {
+                hiddenMessage.classList.add('active');
+                btnText.textContent = "And I will always cherish you";
+                createSparkles(12);
+            } else {
+                hiddenMessage.classList.remove('active');
+                btnText.textContent = "You mean the world to me";
+            }
+        });
+
+        // Particle System for Background
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = `hsl(${Math.random() * 30 + 330}, 80%, 75%)`;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        const particles = Array.from({ length: 45 }, () => new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Extra Burst Effect on Click
+        function createSparkles(count) {
+            const rect = toggleBtn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = centerX + 'px';
+                sparkle.style.top = centerY + 'px';
+                sparkle.style.width = '6px';
+                sparkle.style.height = '6px';
+                sparkle.style.backgroundColor = '#ff85a2';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '100';
+                sparkle.style.boxShadow = '0 0 10px #ff85a2';
+
+                const destinationX = (Math.random() - 0.5) * 200;
+                const destinationY = (Math.random() - 0.5) * 200;
+
+                document.body.appendChild(sparkle);
+
+                const animation = sparkle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${destinationX}px, ${destinationY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                });
+
+                animation.onfinish = () => sparkle.remove();
+            }
+        }
+    </script>
+</body>
+</html>
