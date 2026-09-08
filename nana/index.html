@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>For My Dearest Nana ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,35 +18,10 @@
             --glow-color: rgba(255, 117, 140, 0.25);
         }
 
-        /* Prevent Text Selection, Copying & Long-Press Menus Entirely */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Apple Emoji Styling */
-        .apple-emoji {
-            width: 1.25em;
-            height: 1.25em;
-            vertical-align: -0.22em;
-            display: inline-block;
-            object-fit: contain;
-            pointer-events: none;
-            margin: 0 2px;
-        }
-
-        /* Hide Browser Scrollbar Across All Browsers */
+        /* Hide Browser Scrollbar / Slider Bar Across All Browsers */
         html, body {
             -ms-overflow-style: none; /* IE & Edge */
             scrollbar-width: none; /* Firefox */
-            touch-action: pan-y; /* Allows vertical pull-to-refresh swipe */
         }
 
         ::-webkit-scrollbar {
@@ -55,12 +30,10 @@
             height: 0;
         }
 
-        /* Lock background scrolling while preserving swipe-to-refresh */
-        body.no-scroll {
-            overflow: hidden !important;
-            height: 100vh !important;
-            height: 100dvh !important;
-            touch-action: pan-y !important; /* Enables swipe to refresh on mobile */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
@@ -109,17 +82,17 @@
             100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
         }
 
-        /* Modal Overlay & Frosted Glass Popup */
+        /* Perfectly Centered Blur Overlay Modal for Smart Devices (Accounting for Mobile Address Bars) */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh;
-            background: rgba(8, 4, 15, 0.65);
-            backdrop-filter: blur(20px) saturate(160%);
-            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            height: 100dvh; /* Dynamic Viewport Height fixes mobile address bar offsets */
+            background: rgba(10, 5, 18, 0.78);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -127,7 +100,6 @@
             padding: 20px;
             opacity: 1;
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
-            touch-action: pan-y; /* Keeps swipe to refresh enabled */
         }
 
         .modal-overlay.hidden {
@@ -136,19 +108,17 @@
             pointer-events: none;
         }
 
-        /* Frosted Glass Effect Popup Card */
         .modal-card {
             max-width: 500px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 28px;
             padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 
-                        inset 0 1px 2px rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(35px) saturate(200%);
-            -webkit-backdrop-filter: blur(35px) saturate(200%);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             margin: auto;
             display: flex;
             flex-direction: column;
@@ -156,16 +126,12 @@
             justify-content: center;
         }
 
-        /* Pure Icon Heart Shape (No Emoji) */
-        .modal-card .heart-icon-shape {
-            font-size: 2.8rem;
+        .modal-card .heart-icon {
+            font-size: 3rem;
             color: var(--accent-rose);
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             animation: heartPulse 1.5s infinite ease-in-out;
-            filter: drop-shadow(0 0 15px var(--glow-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-shadow: 0 0 20px var(--glow-color);
         }
 
         @keyframes heartPulse {
@@ -209,7 +175,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             border-radius: 100px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             outline: none;
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
@@ -231,17 +197,15 @@
         }
 
         .btn-no {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-sub);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transform-origin: center center;
             z-index: 1;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
         .btn-no:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--text-main);
         }
 
@@ -580,7 +544,7 @@
         }
     </style>
 </head>
-<body class="no-scroll">
+<body>
 
     <!-- Ambient Background Glow -->
     <div class="ambient-glow"></div>
@@ -588,15 +552,14 @@
     <!-- Particle Canvas -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- Love Prompt Modal Overlay with Frosted Glass Card -->
+    <!-- Love Prompt Modal Overlay (Centered vertically & horizontally on all screen viewports) -->
     <div class="modal-overlay" id="loveModalOverlay">
         <div class="modal-card">
-            <!-- Pure Icon Heart Shape (NO text emoji) -->
-            <div class="heart-icon-shape">
+            <div class="heart-icon">
                 <i class="fas fa-heart"></i>
             </div>
             <div class="modal-question" id="modalQuestionText">
-                <!-- Inner HTML injected dynamically with real Apple Emoji images -->
+                Do you love Muaz? ❤️
             </div>
             <div class="modal-buttons">
                 <button class="btn-modal btn-yes" id="btnYes">Yes</button>
@@ -654,67 +617,6 @@
     </div>
 
     <script>
-        // --- REAL APPLE EMOJI CONVERTER ENGINE ---
-        // Converts text emojis to actual Apple Emoji images (works on Chrome, Windows, Android, Linux, Mac)
-        function renderAppleEmojiText(text) {
-            const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])/g;
-            return text.replace(emojiRegex, (emoji) => {
-                const codePoints = [];
-                for (const char of emoji) {
-                    const code = char.codePointAt(0).toString(16);
-                    if (code !== 'fe0f') { // strip optional variation selector
-                        codePoints.push(code);
-                    }
-                }
-                const hex = codePoints.join('-');
-                return `<img class="apple-emoji" src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.0.1/img/apple/64/${hex}.png" alt="${emoji}" draggable="false" />`;
-            });
-        }
-
-        // --- STRICT SECURITY: PREVENT COPY, CONTEXT MENU, LONG-PRESS, KEYBOARD & TOUCH ZOOM ---
-        
-        // Disable Right-Click Context Menu
-        document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // Disable Copy, Cut, Select Start
-        document.addEventListener('copy', e => e.preventDefault());
-        document.addEventListener('cut', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-
-        // Disable Inspect Element, Copy & Zoom Keyboard Shortcuts
-        document.addEventListener('keydown', e => {
-            const k = e.key.toLowerCase();
-            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a', 'p', 'i', 'j'].includes(k)) {
-                e.preventDefault();
-            }
-            // Prevent Keyboard Zoom (Ctrl + '+' / '-' / '0')
-            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(k)) {
-                e.preventDefault();
-            }
-        });
-
-        // Prevent Touch Multi-finger Pinch Zoom (Allows single-touch swipe down to refresh)
-        document.addEventListener('touchmove', e => {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Prevent Safari Gesture Zooming
-        document.addEventListener('gesturestart', e => e.preventDefault());
-
-        // Prevent Mouse Wheel Ctrl Zoom
-        document.addEventListener('wheel', e => {
-            if (e.ctrlKey) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-
-        // --- POPUP QUESTION SEQUENCING & APPLE EMOJI LOGIC ---
-        
-        const initialQuestion = "Do you love Muaz? ❤️";
-
         // FIXED First 3 Follow-Up Questions
         const fixedFirstQuestions = [
             "Are you sure? 🥺",
@@ -833,9 +735,6 @@
         const btnNo = document.getElementById('btnNo');
         const mainContainer = document.getElementById('mainContainer');
 
-        // Set Initial Question with Apple Emoji
-        modalQuestionText.innerHTML = renderAppleEmojiText(initialQuestion);
-
         // Handle "No" Button Click Sequence
         btnNo.addEventListener('click', () => {
             noPressCount++;
@@ -850,7 +749,7 @@
             } else if (noPressCount === 3) {
                 nextQuestion = fixedFirstQuestions[2];
             } 
-            // 2. On 100th press (or beyond), show the FIXED final question
+            // 2. On 100th press (or beyond), show the FIXED final question & make "No" disappear
             else if (noPressCount >= totalMaxPresses) {
                 nextQuestion = finalQuestion;
             } 
@@ -860,7 +759,7 @@
                 nextQuestion = randomQuestionsPool[randomIndex];
             }
 
-            // Shrink "No" button progressively smaller
+            // Shrink "No" button progressively smaller and smaller
             const noScale = Math.max(0, 1 - (noPressCount / totalMaxPresses));
             btnNo.style.transform = `scale(${noScale})`;
             btnNo.style.opacity = noScale;
@@ -869,28 +768,24 @@
             const yesScale = 1 + (noPressCount * 0.008);
             btnYes.style.transform = `scale(${Math.min(yesScale, 1.8)})`;
 
-            // Disappear "No" button completely if scaled down to zero or reached max press count
+            // On or after 100th press, disappear "No" button completely so only "Yes" remains
             if (noPressCount >= totalMaxPresses || noScale <= 0.01) {
                 btnNo.style.display = 'none';
                 btnYes.style.transform = 'scale(1.3)';
             }
 
-            // Smooth text transition with Apple Emoji rendering
+            // Smooth text transition
             modalQuestionText.classList.add('fade-swap');
             setTimeout(() => {
-                modalQuestionText.innerHTML = renderAppleEmojiText(nextQuestion);
+                modalQuestionText.textContent = nextQuestion;
                 modalQuestionText.classList.remove('fade-swap');
             }, 180);
         });
 
-        // Handle "Yes" Button Click (Unlocks Scrolling and Unveils Main Content)
+        // Handle "Yes" Button Click
         btnYes.addEventListener('click', () => {
             loveModalOverlay.classList.add('hidden');
             mainContainer.classList.add('visible');
-            
-            // Unlocks main page scrolling while retaining swipe-to-refresh
-            document.body.classList.remove('no-scroll');
-            
             createSparkles(30);
         });
 
