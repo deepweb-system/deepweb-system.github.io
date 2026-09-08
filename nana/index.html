@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>For My Dearest Nana ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,12 +16,29 @@
             --text-main: #fceef3;
             --text-sub: #d3c4d1;
             --glow-color: rgba(255, 117, 140, 0.25);
+            
+            /* Apple Emoji Priority Font Stack */
+            --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
 
-        /* Hide Browser Scrollbar / Slider Bar Across All Browsers */
+        /* Prevent Text Selection, Copying & Long-Press Menus Entirely */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Hide Browser Scrollbar Across All Browsers */
         html, body {
             -ms-overflow-style: none; /* IE & Edge */
             scrollbar-width: none; /* Firefox */
+            touch-action: pan-x pan-y;
         }
 
         ::-webkit-scrollbar {
@@ -30,16 +47,18 @@
             height: 0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Lock background scrolling until pop-up is dismissed */
+        body.no-scroll {
+            overflow: hidden !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            touch-action: none !important;
         }
 
         body {
             background: var(--bg-gradient);
             color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
             min-height: 100vh;
             min-height: 100dvh;
             overflow-x: hidden;
@@ -82,17 +101,17 @@
             100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
         }
 
-        /* Perfectly Centered Blur Overlay Modal for Smart Devices (Accounting for Mobile Address Bars) */
+        /* Modal Overlay & Frosted Glass Popup */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Dynamic Viewport Height fixes mobile address bar offsets */
-            background: rgba(10, 5, 18, 0.78);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            height: 100dvh; /* Accounts for mobile search bars & browser chrome */
+            background: rgba(8, 4, 15, 0.65);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -100,6 +119,7 @@
             padding: 20px;
             opacity: 1;
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+            touch-action: none;
         }
 
         .modal-overlay.hidden {
@@ -108,17 +128,19 @@
             pointer-events: none;
         }
 
+        /* Frosted Glass Effect Popup Card */
         .modal-card {
             max-width: 500px;
             width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.22);
             border-radius: 28px;
             padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 
+                        inset 0 1px 2px rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(35px) saturate(200%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
             margin: auto;
             display: flex;
             flex-direction: column;
@@ -132,6 +154,7 @@
             margin-bottom: 20px;
             animation: heartPulse 1.5s infinite ease-in-out;
             text-shadow: 0 0 20px var(--glow-color);
+            font-family: var(--font-emoji);
         }
 
         @keyframes heartPulse {
@@ -140,7 +163,7 @@
         }
 
         .modal-question {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
             font-size: 1.8rem;
             color: var(--text-main);
             margin-bottom: 30px;
@@ -171,11 +194,11 @@
 
         .btn-modal {
             padding: 14px 32px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
             font-size: 1.1rem;
             font-weight: 600;
             border-radius: 100px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             cursor: pointer;
             outline: none;
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
@@ -197,15 +220,17 @@
         }
 
         .btn-no {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--text-sub);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transform-origin: center center;
             z-index: 1;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .btn-no:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             color: var(--text-main);
         }
 
@@ -281,7 +306,7 @@
         }
 
         h1 {
-            font-family: 'Alex Brush', cursive;
+            font-family: 'Alex Brush', var(--font-emoji), cursive;
             font-size: 4rem;
             line-height: 1.2;
             font-weight: 400;
@@ -293,7 +318,7 @@
         }
 
         .subtitle {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
             font-size: 1.35rem;
             font-style: italic;
             color: var(--text-sub);
@@ -303,7 +328,7 @@
 
         /* Message Box */
         .message-box {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
             font-size: 1.45rem;
             line-height: 1.8;
             margin: 35px 0;
@@ -354,7 +379,7 @@
         }
 
         .single-line-text {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', var(--font-emoji), sans-serif;
             font-size: 1.5rem;
             font-weight: 500;
             color: #ffffff;
@@ -424,7 +449,7 @@
         }
 
         .hidden-message-card p {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
             font-size: 1.35rem;
             line-height: 1.7;
             color: #ffe6ee;
@@ -444,14 +469,14 @@
         }
 
         .signature-title {
-            font-family: 'Alex Brush', cursive;
+            font-family: 'Alex Brush', var(--font-emoji), cursive;
             font-size: 3rem;
             color: #ffe0eb;
             line-height: 1.1;
         }
 
         .signature-sub {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Cormorant Garamond', var(--font-emoji), serif;
             font-size: 1.15rem;
             letter-spacing: 1.5px;
             color: var(--text-sub);
@@ -544,7 +569,7 @@
         }
     </style>
 </head>
-<body>
+<body class="no-scroll">
 
     <!-- Ambient Background Glow -->
     <div class="ambient-glow"></div>
@@ -552,11 +577,11 @@
     <!-- Particle Canvas -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- Love Prompt Modal Overlay (Centered vertically & horizontally on all screen viewports) -->
+    <!-- Love Prompt Modal Overlay with Frosted Glass Card -->
     <div class="modal-overlay" id="loveModalOverlay">
         <div class="modal-card">
             <div class="heart-icon">
-                <i class="fas fa-heart"></i>
+                ❤️
             </div>
             <div class="modal-question" id="modalQuestionText">
                 Do you love Muaz? ❤️
@@ -617,6 +642,47 @@
     </div>
 
     <script>
+        // STRICTLY PREVENT COPY, LONG PRESS, CONTEXT MENU & ZOOMING
+        
+        // Disable Right-Click Context Menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Disable Copy, Cut, Select Start
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+
+        // Disable Inspect Element and Copy Keyboard Shortcuts
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'a', 'p', 'i', 'j'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+            }
+            // Prevent Keyboard Zoom (Ctrl + '+' / '-' / '0')
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Prevent Touch Pinch Zoom
+        document.addEventListener('touchmove', e => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent Gesture Zoom on Safari
+        document.addEventListener('gesturestart', e => e.preventDefault());
+
+        // Prevent Wheel Zoom with Ctrl Key
+        document.addEventListener('wheel', e => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+
+        // POPUP QUESTION SEQUENCING & LOGIC
+        
         // FIXED First 3 Follow-Up Questions
         const fixedFirstQuestions = [
             "Are you sure? 🥺",
@@ -782,10 +848,14 @@
             }, 180);
         });
 
-        // Handle "Yes" Button Click
+        // Handle "Yes" Button Click (Unlocks Scrolling and Unveils Content)
         btnYes.addEventListener('click', () => {
             loveModalOverlay.classList.add('hidden');
             mainContainer.classList.add('visible');
+            
+            // Remove background scroll lock
+            document.body.classList.remove('no-scroll');
+            
             createSparkles(30);
         });
 
